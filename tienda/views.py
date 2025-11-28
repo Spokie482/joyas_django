@@ -4,11 +4,17 @@ from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.shortcuts import render, get_object_or_404, redirect
+from .carrito import Carrito
+from django.contrib.auth.decorators import login_required
+from .models import Orden, DetalleOrden
+from .forms import CheckoutForm
 
 def catalogo(request):
     # 1. Obtenemos todas las joyas de la base de datos
     joyas = Producto.objects.all()
     query = request.GET.get('q') # 'q' es el nombre que le pusimos al input en el HTML
+    # 2. Productos en OFERTA (Solo traemos los que tienen el check activado)
+    ofertas = Producto.objects.filter(en_oferta=True)[:5] # Limitamos a 5
 
     if query:
         # 3. Filtramos: Si el nombre O la descripción contienen el texto
@@ -16,8 +22,15 @@ def catalogo(request):
             Q(nombre__icontains=query) | 
             Q(descripcion__icontains=query)
         )
-    # 2. Se las enviamos al HTML (index.html)
-    return render(request, 'tienda/index.html', {'joyas': joyas})
+    categoria_filter = request.GET.get('categoria')
+    if categoria_filter:
+        joyas = joyas.filter(categoria=categoria_filter)
+
+    return render(request, 'tienda/index.html', {
+        'joyas': joyas,
+        'ofertas': ofertas,
+        'categoria_actual': categoria_filter # Pasamos esto para usarlo en el título
+    })
 
 
 # 👇 ESTA ES LA NUEVA FUNCIÓN
@@ -40,3 +53,76 @@ def registro(request):
         form = UserCreationForm()
     
     return render(request, 'tienda/registro.html', {'form': form})
+
+def agregar_carrito(request, producto_id):
+    carrito = Carrito(request)
+    producto = get_object_or_404(Producto, id=producto_id)
+    carrito.agregar(producto)
+    return redirect("ver_carrito")
+
+def eliminar_carrito(request, producto_id):
+    carrito = Carrito(request)
+    producto = get_object_or_404(Producto, id=producto_id)
+    carrito.eliminar(producto)
+    return redirect("ver_carrito")
+
+def restar_carrito(request, producto_id):
+    carrito = Carrito(request)
+    producto = get_object_or_404(Producto, id=producto_id)
+    carrito.restar(producto)
+    return redirect("ver_carrito")
+
+def limpiar_carrito(request):
+    carrito = Carrito(request)
+    carrito.vaciar()
+    return redirect("ver_carrito")
+
+def ver_carrito(request):
+    # Calculamos el total para mostrarlo en el HTML
+    carrito = Carrito(request)
+    total = carrito.obtener_total()
+    return render(request, 'tienda/carrito.html', {'total': total})
+
+
+
+@login_required # <--- Esto obliga a iniciar sesión antes de comprar
+def finalizar_compra(request):
+    carrito = Carrito(request)
+    if not carrito.carrito:
+        return redirect('catalogo')
+
+    # LÓGICA DEL FORMULARIO
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            # 1. Crear la orden con los datos del formulario, pero SIN guardarla aún
+            orden = form.save(commit=False)
+            orden.usuario = request.user
+            orden.total = carrito.obtener_total()
+            orden.save() # Ahora sí la guardamos con usuario y total
+
+            # 2. Guardar los detalles (esto es igual que antes)
+            for key, item in carrito.carrito.items():
+                producto = get_object_or_404(Producto, id=item["producto_id"])
+                DetalleOrden.objects.create(
+                    orden=orden,
+                    producto=producto,
+                    cantidad=item["cantidad"],
+                    precio_unitario=float(item["precio"])
+                )
+                # Restar stock
+                producto.stock -= item["cantidad"]
+                producto.save()
+
+            # 3. Limpiar y redigir
+            carrito.vaciar()
+            return render(request, 'tienda/compra_exitosa.html', {'orden': orden})
+    else:
+        # Si entramos por GET, mostramos el formulario vacío
+        form = CheckoutForm()
+
+    return render(request, 'tienda/checkout.html', {'form': form, 'carrito': carrito})
+def mis_compras(request):
+    # Buscamos solo las órdenes de ESTE usuario, ordenadas de la más nueva a la más vieja
+    ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha')
+    return render(request, 'tienda/mis_compras.html', {'ordenes': ordenes})

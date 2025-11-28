@@ -1,0 +1,20 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}¡Compra Exitosa!{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 80px auto; text-align: center; background: #111; padding: 40px; border: 1px solid #333; border-top: 3px solid #d4af37;">
+    <h1 style="color: #d4af37; margin-bottom: 20px;">¡Gracias por tu compra!</h1>
+    
+    <div style="font-size: 4rem; margin: 20px 0;">✨</div>
+    
+    <p style="font-size: 1.2rem; color: #eee;">Tu pedido ha sido registrado correctamente.</p>
+    <p style="color: #888; margin-top: 10px;">Número de Orden: <strong style="color: #fff;">#{{ orden.id }}</strong></p>
+    
+    <hr style="border-color: #333; margin: 30px 0;">
+    
+    <a href="{% url 'catalogo' %}" class="btn-gold" style="text-decoration: none; padding: 10px 20px; background: #d4af37; color: #000; font-weight: bold;">
+        Seguir Comprando
+    </a>
+</div>
+{% endblock %}

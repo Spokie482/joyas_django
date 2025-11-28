@@ -41,10 +41,10 @@
             <div class="price">${{ joya.precio }}</div>
             <p class="desc">{{ joya.descripcion }}</p>
             
-            <a href="https://wa.me/5491112345678?text=Hola,%20me%20interesa%20el%20producto%20{{ joya.nombre }}" 
+            <a href="{% url 'agregar_carrito' joya.id %}"
                class="btn-gold" 
                target="_blank">
-               COMPRAR AHORA
+               Agregar al carrito
             </a>
         </div>
     </div>

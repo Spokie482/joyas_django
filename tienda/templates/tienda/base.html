@@ -74,13 +74,89 @@
             border: none;
         }
         .btn-gold:hover { background-color: #fff; }
+
+            /* --- BOTÓN FLOTANTE SOCIAL (FAB) --- */
+        .fab-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999; /* Para que siempre esté encima de todo */
+            display: flex;
+            flex-direction: column-reverse; /* Para que se desplieguen hacia arriba */
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* El botón principal (el que se ve siempre) */
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            background: #d4af37; /* Dorado */
+            color: #000;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        /* Efecto al pasar el mouse sobre el contenedor */
+        .fab-container:hover .fab-main {
+            transform: rotate(45deg); /* El icono '+' gira */
+            background: #fff;
+        }
+
+        /* Los botones sociales (ocultos al inicio) */
+        .fab-social {
+            width: 45px;
+            height: 45px;
+            background: #111; /* Negro */
+            color: #d4af37;   /* Icono dorado */
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            
+            /* Animación de entrada */
+            opacity: 0;
+            transform: translateY(20px) scale(0);
+            transition: all 0.3s ease;
+            pointer-events: none; /* No se pueden clicar si están ocultos */
+        }
+
+        .fab-social:hover {
+            background: #d4af37;
+            color: #000;
+        }
+
+        /* Mágica: Al hacer hover en el contenedor, aparecen los iconos */
+        .fab-container:hover .fab-social {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+        }
+
+        /* Retraso para efecto cascada (uno por uno) */
+        .fab-container:hover .fab-social:nth-child(2) { transition-delay: 0.05s; }
+        .fab-container:hover .fab-social:nth-child(3) { transition-delay: 0.1s; }
+        .fab-container:hover .fab-social:nth-child(4) { transition-delay: 0.15s; }
+
     </style>
     {% block extra_css %}{% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
 
     <nav>
-       <a href="{% url 'catalogo' %}" class="logo">Tormenta</a>
+       <a href="{% url 'catalogo' %}" class="logo">Angel Wings</a>
         
         <form action="{% url 'catalogo' %}" method="GET" style="display: flex;">
             <input type="text" name="q" placeholder="Buscar joya..." 
@@ -93,9 +169,15 @@
 
         <div class="nav-links">
             <a href="{% url 'catalogo' %}">CATÁLOGO</a>
+            <a href="{% url 'ver_carrito' %}" style="margin-left: 15px; margin-right: 15px;">
+        🛒 <span style="color: #d4af37; font-weight: bold;">
+            {{ request.session.carrito.keys|length }}
+            </span>
+            </a>
             
             {% if user.is_authenticated %}
                 <span style="color: #d4af37; margin-left: 20px;">👤 {{ user.username }}</span>
+                <a href="{% url 'mis_compras' %}" style="margin-left: 15px; font-size: 0.9rem;">Mis Compras</a>
                 <form action="{% url 'logout' %}" method="post" style="display:inline;">
                     {% csrf_token %}
                     <button type="submit" style="background:none; border:none; color:#aaa; cursor:pointer; margin-left:10px; font-size:0.9rem;">(Salir)</button>
@@ -115,6 +197,24 @@
     <footer>
         &copy; 2025 Tormenta Jewelry. Exclusividad garantizada.
     </footer>
+
+   <div class="fab-container">
+    <button class="fab-main">
+        <i class="ri-add-line"></i>
+    </button>
+
+    <a href="https://wa.me/5491112345678" target="_blank" class="fab-social" title="WhatsApp">
+        <i class="ri-whatsapp-line"></i>
+    </a>
+    
+    <a href="https://instagram.com/tu_tienda" target="_blank" class="fab-social" title="Instagram">
+        <i class="ri-instagram-line"></i>
+    </a>
+    
+    <a href="https://facebook.com/tu_tienda" target="_blank" class="fab-social" title="Facebook">
+        <i class="ri-facebook-fill"></i>
+    </a>
+</div>
 
 </body>
 </html>

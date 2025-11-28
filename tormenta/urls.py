@@ -15,7 +15,18 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('', views.catalogo, name='catalogo'), # <--- Página principal
     path('producto/<int:producto_id>/', views.detalle, name='detalle'), # <--- Página de detalle
+
+    path('mis-compras/', views.mis_compras, name='mis_compras'),
+
+    path('carrito/', views.ver_carrito, name='ver_carrito'),
+    path('carrito/agregar/<int:producto_id>/', views.agregar_carrito, name='agregar_carrito'),
+    path('carrito/eliminar/<int:producto_id>/', views.eliminar_carrito, name='eliminar_carrito'),
+    path('carrito/restar/<int:producto_id>/', views.restar_carrito, name='restar_carrito'),
+    path('carrito/limpiar/', views.limpiar_carrito, name='limpiar_carrito'),
+    path('carrito/finalizar/', views.finalizar_compra, name='finalizar_compra'),
+
 ]
+
 
 # Configuración para ver las imágenes (siempre al final)
 if settings.DEBUG:
