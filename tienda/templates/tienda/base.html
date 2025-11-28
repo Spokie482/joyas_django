@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tormenta | {% block title %}Joyería{% endblock %}</title>
+    <title>Angel Wings | {% block title %}Joyería{% endblock %}</title>
     <style>
         /* --- ESTILOS GLOBALES --- */
         body {
@@ -176,16 +176,28 @@
             </a>
             
             {% if user.is_authenticated %}
-                <span style="color: #d4af37; margin-left: 20px;">👤 {{ user.username }}</span>
-                <a href="{% url 'mis_compras' %}" style="margin-left: 15px; font-size: 0.9rem;">Mis Compras</a>
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background:none; border:none; color:#aaa; cursor:pointer; margin-left:10px; font-size:0.9rem;">(Salir)</button>
-                </form>
+        
+                <a href="{% url 'editar_perfil' %}" style="color: #d4af37; margin-left: 20px; text-decoration: none; font-weight: bold; transition: 0.3s;" title="Editar mi perfil">
+            {% if user.perfil.foto %}
+                <img src="{{ user.perfil.foto.url }}" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle; border: 1px solid #d4af37; object-fit: cover;">
             {% else %}
-                <a href="{% url 'login' %}">INGRESAR</a>
-                <a href="{% url 'registro' %}" class="btn-gold" style="padding: 5px 15px; font-size: 0.8rem;">REGISTRO</a>
+                👤
             {% endif %}
+            {{ user.username }}
+        </a>
+
+        <a href="{% url 'mis_compras' %}" style="margin-left: 15px; font-size: 0.9rem;">Mis Pedidos</a>
+        <a href="{% url 'mis_favoritos' %}" style="margin-left: 15px; font-size: 0.9rem;">Favoritos ❤️</a>
+
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#666; cursor:pointer; margin-left:10px; font-size:0.9rem;">(Salir)</button>
+        </form>
+
+    {% else %}
+        <a href="{% url 'login' %}">INGRESAR</a>
+        <a href="{% url 'registro' %}" class="btn-gold" style="padding: 5px 15px; font-size: 0.8rem;">REGISTRO</a>
+    {% endif %}
         </div>
     </nav>
 

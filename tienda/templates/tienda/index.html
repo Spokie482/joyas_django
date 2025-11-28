@@ -127,6 +127,29 @@
         .big-logo { font-size: 3rem; letter-spacing: 5px; }
         .hero-landing { height: 80vh; }
     }
+
+    /* Estilos del botón de Favoritos */
+    .btn-fav {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.5);
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        z-index: 10; /* Encima de la imagen */
+    }
+    .btn-fav:hover { background: #fff; color: #c0392b; }
+    .btn-fav.active { color: #c0392b; } /* Rojo cuando es favorito */
+
 </style>
 {% endblock %}
 
@@ -341,6 +364,13 @@
         <div class="grid">
             {% for joya in joyas %}
             <div class="card">
+                <div class="card" style="position: relative;"> <button class="btn-fav" onclick="toggleFavorito({{ joya.id }}, this)">
+                {% if joya in user.favoritos.all %} 
+                    <i class="ri-heart-fill"></i>
+                {% else %}
+                    <i class="ri-heart-line"></i>
+                {% endif %}
+            </button>
                 <a href="{% url 'detalle' joya.id %}" style="text-decoration: none;">
                     {% if joya.imagen %}
                         <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="card-img">
@@ -359,6 +389,35 @@
                 <div style="text-align: center; grid-column: 1/-1; padding: 50px; color: #666;">
                     <p>No hay joyas en esta categoría.</p>
                 </div>
+
+                <script>
+                    function toggleFavorito(productoId, btn) {
+        // 1. Verificamos si el usuario está logueado (si no, mandamos al login)
+                        {% if not user.is_authenticated %}
+                            window.location.href = "{% url 'login' %}";
+                            return;
+                        {% endif %}
+
+        // 2. Llamada AJAX al servidor
+                        fetch(`/favoritos/toggle/${productoId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                // 3. Cambiamos el icono según la respuesta
+                        const icon = btn.querySelector('i');
+                        if (data.agregado) {
+                            icon.classList.remove('ri-heart-line');
+                            icon.classList.add('ri-heart-fill');
+                            btn.classList.add('active');
+                        } else {
+                            icon.classList.remove('ri-heart-fill');
+                            icon.classList.add('ri-heart-line');
+                            btn.classList.remove('active');
+                            }
+                    })
+                        .catch(error => console.error('Error:', error));
+                        }
+                </script>
+
             {% endfor %}
         </div>
     </div>

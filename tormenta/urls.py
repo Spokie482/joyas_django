@@ -15,6 +15,7 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('', views.catalogo, name='catalogo'), # <--- Página principal
     path('producto/<int:producto_id>/', views.detalle, name='detalle'), # <--- Página de detalle
+    path('perfil/editar/', views.editar_perfil, name='editar_perfil'),
 
     path('mis-compras/', views.mis_compras, name='mis_compras'),
 
@@ -24,6 +25,9 @@ urlpatterns = [
     path('carrito/restar/<int:producto_id>/', views.restar_carrito, name='restar_carrito'),
     path('carrito/limpiar/', views.limpiar_carrito, name='limpiar_carrito'),
     path('carrito/finalizar/', views.finalizar_compra, name='finalizar_compra'),
+
+    path('favoritos/toggle/<int:producto_id>/', views.toggle_favorito, name='toggle_favorito'),
+    path('mis-favoritos/', views.mis_favoritos, name='mis_favoritos'),
 
 ]
 
