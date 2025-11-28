@@ -1,0 +1,72 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Acceso Socios{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 80px auto; /* Centrado vertical */
+        padding: 40px;
+        background: #111;
+        border: 1px solid #333;
+        border-top: 3px solid #d4af37; /* Toque dorado */
+        box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        text-align: center;
+    }
+    
+    h2 { color: #d4af37; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
+    
+    input { 
+        width: 100%; 
+        padding: 12px; 
+        margin-bottom: 15px;
+        background: #222; 
+        border: 1px solid #444; 
+        color: white; 
+        box-sizing: border-box;
+    }
+    input:focus { outline: none; border-color: #d4af37; }
+    
+    label { display: none; } /* Ocultamos etiquetas para diseño minimalista */
+    
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: #d4af37;
+        color: #000;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+    .btn-login:hover { background: #fff; }
+    
+    .register-link {
+        display: block;
+        margin-top: 20px;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .register-link:hover { color: #d4af37; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Acceso Socios</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        
+        <button type="submit" class="btn-login">INGRESAR</button>
+    </form>
+
+    <a href="{% url 'registro' %}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
+</div>
+{% endblock %}

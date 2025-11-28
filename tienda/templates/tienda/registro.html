@@ -1,0 +1,58 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Crear Cuenta VIP{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 40px;
+        background: #111;
+        border: 1px solid #333;
+        border-top: 3px solid #d4af37;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    h2 { text-align: center; color: #d4af37; margin-bottom: 30px; }
+    
+    /* Estilos para los campos que genera Django automáticamente */
+    p { margin-bottom: 15px; }
+    label { display: block; color: #aaa; margin-bottom: 5px; }
+    input { 
+        width: 100%; 
+        padding: 10px; 
+        background: #222; 
+        border: 1px solid #444; 
+        color: white; 
+        box-sizing: border-box; /* Para que el padding no rompa el ancho */
+    }
+    input:focus { outline: none; border-color: #d4af37; }
+    
+    .helptext { display: none; } /* Ocultamos textos de ayuda largos para limpiar el diseño */
+    
+    .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background: #d4af37;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: 0.3s;
+    }
+    .btn-submit:hover { background: #fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Registro VIP</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn-submit">CREAR CUENTA</button>
+    </form>
+</div>
+{% endblock %}

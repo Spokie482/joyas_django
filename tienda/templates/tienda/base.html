@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tormenta | {% block title %}Joyería{% endblock %}</title>
+    <style>
+        /* --- ESTILOS GLOBALES --- */
+        body {
+            background-color: #0a0a0a;
+            color: #f0f0f0;
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* NAVBAR (BARRA DE NAVEGACIÓN) */
+        nav {
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            color: #d4af37; /* Oro */
+            font-size: 1.5rem;
+            text-decoration: none;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: #d4af37; }
+
+        /* CONTENIDO PRINCIPAL */
+        main {
+            flex: 1; /* Esto empuja el footer hacia abajo */
+            padding: 20px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #111;
+            color: #444;
+            font-size: 0.8rem;
+            border-top: 1px solid #222;
+        }
+
+        /* Clases utilitarias heredadas */
+        .btn-gold {
+            background-color: #d4af37;
+            color: #000;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-gold:hover { background-color: #fff; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <nav>
+       <a href="{% url 'catalogo' %}" class="logo">Tormenta</a>
+        
+        <form action="{% url 'catalogo' %}" method="GET" style="display: flex;">
+            <input type="text" name="q" placeholder="Buscar joya..." 
+                   style="padding: 5px 10px; border-radius: 4px 0 0 4px; border: none; outline: none;">
+            <button type="submit" 
+                    style="padding: 5px 10px; background: #d4af37; border: none; border-radius: 0 4px 4px 0; cursor: pointer;">
+                🔍
+            </button>
+        </form>
+
+        <div class="nav-links">
+            <a href="{% url 'catalogo' %}">CATÁLOGO</a>
+            
+            {% if user.is_authenticated %}
+                <span style="color: #d4af37; margin-left: 20px;">👤 {{ user.username }}</span>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:#aaa; cursor:pointer; margin-left:10px; font-size:0.9rem;">(Salir)</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">INGRESAR</a>
+                <a href="{% url 'registro' %}" class="btn-gold" style="padding: 5px 15px; font-size: 0.8rem;">REGISTRO</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        &copy; 2025 Tormenta Jewelry. Exclusividad garantizada.
+    </footer>
+
+</body>
+</html>

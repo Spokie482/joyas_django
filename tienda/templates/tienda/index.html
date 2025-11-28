@@ -1,0 +1,66 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}Catálogo Exclusivo{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos específicos solo para el catálogo */
+    .header-hero {
+        text-align: center;
+        padding: 40px 20px;
+    }
+    .header-hero h1 { font-size: 3rem; color: #d4af37; margin: 0; text-transform: uppercase;}
+    .subtitle { color: #888; font-style: italic; margin-top: 10px; }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 40px;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .card {
+        background-color: #111;
+        border: 1px solid #222;
+        transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); border-color: #d4af37; }
+    
+    .card-img { width: 100%; height: 250px; object-fit: cover; background-color: #222; }
+    .card-info { padding: 20px; text-align: center; }
+    .card-title { font-size: 1.1rem; margin: 10px 0; color: #eee; }
+    .card-price { color: #d4af37; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;}
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="header-hero">
+        <h1>Tormenta</h1>
+        <div class="subtitle">Colección de Verano</div>
+    </div>
+
+    <div class="grid">
+        {% for joya in joyas %}
+        <div class="card">
+            {% if joya.imagen %}
+                <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="card-img">
+            {% else %}
+                <div style="height:250px; display:flex; align-items:center; justify-content:center; color:#555;">Sin Imagen</div>
+            {% endif %}
+            
+            <div class="card-info">
+                <h2 class="card-title">{{ joya.nombre }}</h2>
+                <div class="card-price">${{ joya.precio }}</div>
+                <a href="{% url 'detalle' joya.id %}" class="btn-gold" style="width: 80%;">Ver Detalle</a>
+            </div>
+        </div>
+        {% empty %}
+            <div style="text-align: center; width: 100%; color: #888; margin-top: 50px;">
+                <h3>No encontramos joyas con ese nombre.</h3>
+                <p>Intenta buscando "Anillo", "Oro" o "Collar".</p>
+                <a href="{% url 'catalogo' %}" class="btn-gold" style="margin-top: 20px;">Ver todo el catálogo</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

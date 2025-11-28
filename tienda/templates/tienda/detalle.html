@@ -1,0 +1,51 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}{{ joya.nombre }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos específicos para el detalle */
+    .detail-container {
+        display: flex;
+        background: #111;
+        max-width: 900px;
+        width: 100%;
+        margin: 50px auto;
+        border: 1px solid #333;
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    }
+    .img-section { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; }
+    .img-section img { max-width: 100%; max-height: 500px; object-fit: contain; }
+    
+    .info-section { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+    h1 { color: #d4af37; font-size: 2.5rem; margin-bottom: 10px; }
+    .price { font-size: 2rem; color: #fff; margin-bottom: 20px; font-weight: bold;}
+    .desc { color: #aaa; line-height: 1.6; margin-bottom: 30px; }
+    
+    .btn-back { color: #666; text-decoration: none; margin-bottom: 20px; display: inline-block;}
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="detail-container">
+        <div class="img-section">
+            {% if joya.imagen %}
+                <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}">
+            {% else %}
+                <p>Sin Imagen</p>
+            {% endif %}
+        </div>
+        <div class="info-section">
+            <a href="{% url 'catalogo' %}" class="btn-back">← Volver al catálogo</a>
+            <h1>{{ joya.nombre }}</h1>
+            <div class="price">${{ joya.precio }}</div>
+            <p class="desc">{{ joya.descripcion }}</p>
+            
+            <a href="https://wa.me/5491112345678?text=Hola,%20me%20interesa%20el%20producto%20{{ joya.nombre }}" 
+               class="btn-gold" 
+               target="_blank">
+               COMPRAR AHORA
+            </a>
+        </div>
+    </div>
+{% endblock %}
