@@ -4,26 +4,25 @@
 
 {% block extra_css %}
 <style>
-    /* --- 1. SECCIÓN DE BIENVENIDA (PANTALLA COMPLETA) --- */
+    /* --- 1. SECCIÓN DE BIENVENIDA --- */
     .hero-landing {
-        height: 90vh; /* Ocupa el 90% de la altura de la pantalla (dejamos ver un poquito del navbar) */
+        height: 90vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%); /* Fondo con degradado sutil */
+        background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
         text-align: center;
         position: relative;
     }
 
     .big-logo {
-        font-size: 6rem; /* Logo GIGANTE */
+        font-size: 6rem;
         color: #d4af37;
         font-family: 'Georgia', serif;
         text-transform: uppercase;
         letter-spacing: 15px;
         margin: 0;
-        /* Animación de entrada */
         opacity: 0;
         animation: fadeIn 2s ease-out forwards;
     }
@@ -35,7 +34,7 @@
         margin-top: 20px;
         font-style: italic;
         opacity: 0;
-        animation: fadeIn 2s ease-out 1s forwards; /* Aparece 1 segundo después */
+        animation: fadeIn 2s ease-out 1s forwards;
     }
 
     .scroll-btn {
@@ -58,16 +57,15 @@
         box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
     }
 
-    /* Definición de la animación */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* --- 2. ESTILOS DEL CATÁLOGO (FILTROS Y GRID) --- */
+    /* --- 2. ESTILOS DEL CATÁLOGO --- */
     .catalogo-section {
         padding: 50px 20px;
-        background: #0a0a0a; /* Aseguramos fondo negro */
+        background: #0a0a0a;
         min-height: 100vh;
     }
 
@@ -109,10 +107,12 @@
         margin: 0 auto;
     }
 
+    /* TARJETA CORREGIDA */
     .card {
         background-color: #111;
         border: 1px solid #222;
         transition: transform 0.3s ease;
+        position: relative; /* Importante para el corazón */
     }
     .card:hover { transform: translateY(-5px); border-color: #d4af37; }
     .card-img { width: 100%; height: 280px; object-fit: cover; filter: brightness(0.9); }
@@ -122,7 +122,6 @@
     .card-title { font-size: 1.1rem; color: #fff; margin: 10px 0; letter-spacing: 1px; }
     .card-price { color: #d4af37; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;}
     
-    /* Responsivo para móviles */
     @media (max-width: 768px) {
         .big-logo { font-size: 3rem; letter-spacing: 5px; }
         .hero-landing { height: 80vh; }
@@ -145,11 +144,10 @@
         justify-content: center;
         font-size: 1.2rem;
         transition: 0.3s;
-        z-index: 10; /* Encima de la imagen */
+        z-index: 10;
     }
     .btn-fav:hover { background: #fff; color: #c0392b; }
-    .btn-fav.active { color: #c0392b; } /* Rojo cuando es favorito */
-
+    .btn-fav.active { color: #c0392b; }
 </style>
 {% endblock %}
 
@@ -159,41 +157,33 @@
     <div class="hero-landing">
         <h1 class="big-logo">Angel Wings</h1>
         <p class="slogan">Jewelry</p>
-        
         <a href="#catalogo-start" class="scroll-btn">Ver Colección ↓</a>
     </div>
     {% endif %}
 
-{% if not categoria_actual and ofertas %}
+    {% if not categoria_actual and ofertas %}
     <style>
-        /* Estilos exclusivos para la sección de ofertas */
         .offers-section {
-            background: #f4f1ea; /* Color crema elegante (contraste con el negro) */
+            background: #f4f1ea;
             color: #111;
             padding: 0;
             position: relative;
-            overflow: hidden; /* Oculta lo que se sale del ancho */
+            overflow: hidden;
         }
-
         .offers-slider {
             display: flex;
             overflow-x: auto;
-            scroll-snap-type: x mandatory; /* Efecto imán al hacer scroll */
+            scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
-        
-        /* Ocultar barra de scroll fea */
         .offers-slider::-webkit-scrollbar { display: none; }
-
         .offer-card {
-            min-width: 100%; /* Cada oferta ocupa TODA la pantalla */
-            height: 80vh;    /* Altura considerable */
-            display: flex;   /* Divide izquierda/derecha */
+            min-width: 100%;
+            height: 80vh;
+            display: flex;
             scroll-snap-align: start;
         }
-
-        /* MITAD IZQUIERDA: IMAGEN */
         .offer-img-col {
             flex: 1;
             position: relative;
@@ -203,11 +193,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 10s ease; /* Efecto zoom lento */
+            transition: transform 10s ease;
         }
         .offer-card:hover .offer-img-col img { transform: scale(1.1); }
-
-        /* Etiqueta de descuento flotante */
         .badge-offer {
             position: absolute;
             top: 20px;
@@ -219,8 +207,6 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
-        /* MITAD DERECHA: INFO */
         .offer-info-col {
             flex: 1;
             display: flex;
@@ -229,33 +215,28 @@
             padding: 60px;
             background: #f4f1ea;
         }
-
         .offer-title {
             font-size: 3rem;
             color: #111;
             margin-bottom: 20px;
             font-family: 'Georgia', serif;
         }
-
         .price-wrapper {
             display: flex;
             align-items: baseline;
             gap: 20px;
             margin-bottom: 30px;
         }
-
         .price-old {
             text-decoration: line-through;
             color: #999;
             font-size: 1.5rem;
         }
-
         .price-new {
-            color: #c0392b; /* Rojo elegante para oferta */
+            color: #c0392b;
             font-size: 2.5rem;
             font-weight: bold;
         }
-
         .offer-desc {
             font-size: 1.1rem;
             color: #555;
@@ -263,8 +244,6 @@
             line-height: 1.6;
             max-width: 80%;
         }
-
-        /* Botón de navegación (Flechas) */
         .slider-nav {
             position: absolute;
             bottom: 30px;
@@ -276,7 +255,7 @@
             z-index: 50;
         }
         .nav-btn {
-            background: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente para mejor lectura */
+            background: rgba(0, 0, 0, 0.7);
             color: #d4af37;
             border: 1px solid #d4af37;
             width: 50px;
@@ -289,10 +268,11 @@
             align-items: center;
             justify-content: center;
         }
-        .nav-btn:hover { background: #d4af37; 
+        .nav-btn:hover { 
+            background: #d4af37; 
             color: #000; 
-            transform: scale(1.1); }
-
+            transform: scale(1.1); 
+        }
         @media (max-width: 768px) {
             .offer-card { flex-direction: column; height: auto; }
             .offer-img-col { height: 400px; }
@@ -316,16 +296,11 @@
 
                 <div class="offer-info-col">
                     <h2 class="offer-title">{{ oferta.nombre }}</h2>
-                    
                     <div class="price-wrapper">
                         <span class="price-old">${{ oferta.precio }}</span>
                         <span class="price-new">${{ oferta.precio_oferta }}</span>
                     </div>
-
-                    <p class="offer-desc">
-                        {{ oferta.descripcion|truncatewords:30 }}
-                    </p>
-
+                    <p class="offer-desc">{{ oferta.descripcion|truncatewords:30 }}</p>
                     <a href="{% url 'agregar_carrito' oferta.id %}" class="btn-gold" style="text-align: center; max-width: 250px; background: #111; color: #fff; border: 1px solid #111;">
                         AGREGAR AL CARRITO
                     </a>
@@ -341,13 +316,12 @@
     </div>
     {% endif %}
 
-
     <div id="catalogo-start" class="catalogo-section">
-        
         <div style="text-align: center; margin-bottom: 30px;">
             <h2 style="color: #d4af37; text-transform: uppercase; letter-spacing: 3px;">
                 {% if categoria_actual %}
-                    {{ categoria_actual }} {% else %}
+                    {{ categoria_actual }} 
+                {% else %}
                     CATÁLOGO COMPLETO
                 {% endif %}
             </h2>
@@ -364,13 +338,15 @@
         <div class="grid">
             {% for joya in joyas %}
             <div class="card">
-                <div class="card" style="position: relative;"> <button class="btn-fav" onclick="toggleFavorito({{ joya.id }}, this)">
-                {% if joya in user.favoritos.all %} 
-                    <i class="ri-heart-fill"></i>
-                {% else %}
-                    <i class="ri-heart-line"></i>
-                {% endif %}
-            </button>
+                
+                <button class="btn-fav" onclick="toggleFavorito({{ joya.id }}, this)">
+                    {% if user.is_authenticated and joya in user.favoritos.all %} 
+                        <i class="ri-heart-fill"></i>
+                    {% else %}
+                        <i class="ri-heart-line"></i>
+                    {% endif %}
+                </button>
+
                 <a href="{% url 'detalle' joya.id %}" style="text-decoration: none;">
                     {% if joya.imagen %}
                         <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="card-img">
@@ -389,40 +365,12 @@
                 <div style="text-align: center; grid-column: 1/-1; padding: 50px; color: #666;">
                     <p>No hay joyas en esta categoría.</p>
                 </div>
-
-                <script>
-                    function toggleFavorito(productoId, btn) {
-        // 1. Verificamos si el usuario está logueado (si no, mandamos al login)
-                        {% if not user.is_authenticated %}
-                            window.location.href = "{% url 'login' %}";
-                            return;
-                        {% endif %}
-
-        // 2. Llamada AJAX al servidor
-                        fetch(`/favoritos/toggle/${productoId}/`)
-                        .then(response => response.json())
-                        .then(data => {
-                // 3. Cambiamos el icono según la respuesta
-                        const icon = btn.querySelector('i');
-                        if (data.agregado) {
-                            icon.classList.remove('ri-heart-line');
-                            icon.classList.add('ri-heart-fill');
-                            btn.classList.add('active');
-                        } else {
-                            icon.classList.remove('ri-heart-fill');
-                            icon.classList.add('ri-heart-line');
-                            btn.classList.remove('active');
-                            }
-                    })
-                        .catch(error => console.error('Error:', error));
-                        }
-                </script>
-
             {% endfor %}
         </div>
     </div>
     
     <script>
+        // Scroll suave
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -431,5 +379,29 @@
                 });
             });
         });
+
+        // Script de Favoritos (Corregido y colocado fuera del bucle)
+        function toggleFavorito(productoId, btn) {
+            {% if not user.is_authenticated %}
+                window.location.href = "{% url 'login' %}";
+                return;
+            {% endif %}
+
+            fetch(`/favoritos/toggle/${productoId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const icon = btn.querySelector('i');
+                    if (data.agregado) {
+                        icon.classList.remove('ri-heart-line');
+                        icon.classList.add('ri-heart-fill');
+                        btn.classList.add('active');
+                    } else {
+                        icon.classList.remove('ri-heart-fill');
+                        icon.classList.add('ri-heart-line');
+                        btn.classList.remove('active');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
     </script>
 {% endblock %}
