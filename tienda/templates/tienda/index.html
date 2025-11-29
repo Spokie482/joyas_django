@@ -425,6 +425,97 @@
             <a href="?categoria=PU#catalogo-start" class="cat-btn {% if categoria_actual == 'PU' %}active{% endif %}">Pulseras</a>
         </div>
 
+        <div class="glass-toolbar">
+            <form method="GET" class="toolbar-form" id="filterForm">
+                
+                {% if categoria_actual %}
+                    <input type="hidden" name="categoria" value="{{ categoria_actual }}">
+                {% endif %}
+                {% if request.GET.q %}
+                    <input type="hidden" name="q" value="{{ request.GET.q }}">
+                {% endif %}
+
+                <div class="filter-group">
+                    <input type="number" name="min_price" placeholder="Min $" value="{{ request.GET.min_price }}">
+                    <span>-</span>
+                    <input type="number" name="max_price" placeholder="Max $" value="{{ request.GET.max_price }}">
+                </div>
+
+                <div class="filter-group">
+                    <select name="orden" onchange="document.getElementById('filterForm').submit()">
+                        <option value="reciente" {% if request.GET.orden == 'reciente' %}selected{% endif %}>Más Recientes</option>
+                        <option value="precio_asc" {% if request.GET.orden == 'precio_asc' %}selected{% endif %}>Precio: Bajo a Alto</option>
+                        <option value="precio_desc" {% if request.GET.orden == 'precio_desc' %}selected{% endif %}>Precio: Alto a Bajo</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-filter">FILTRAR</button>
+                
+                {% if request.GET.min_price or request.GET.max_price or request.GET.orden %}
+                    <a href="{% url 'catalogo' %}" class="btn-clean" title="Limpiar filtros">✕</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <style>
+            /* ESTILOS GLASS TOOLBAR */
+            .glass-toolbar {
+                max-width: 900px;
+                margin: 0 auto 40px auto;
+                background: rgba(255, 255, 255, 0.5);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.8);
+                border-radius: 50px;
+                padding: 10px 30px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            }
+            
+            .toolbar-form {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .filter-group {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .filter-group input, .filter-group select {
+                background: rgba(255, 255, 255, 0.8);
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 20px;
+                padding: 8px 15px;
+                color: #2c3e50;
+                font-family: inherit;
+                outline: none;
+            }
+
+            .btn-filter {
+                background: #2c3e50;
+                color: #fff;
+                border: none;
+                padding: 8px 20px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 0.8rem;
+                transition: 0.3s;
+            }
+            .btn-filter:hover { background: #34495e; }
+
+            .btn-clean {
+                color: #e74c3c;
+                text-decoration: none;
+                font-weight: bold;
+                padding: 5px;
+            }
+        </style>
+
+
         <div class="grid">
             {% for joya in joyas %}
             <div class="card">

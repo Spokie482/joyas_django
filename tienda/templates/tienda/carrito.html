@@ -270,14 +270,34 @@
                 <span>$0.00</span>
             </div>
 
-            <div style="margin-top: 20px; display: flex; gap: 5px;">
-                <input type="text" placeholder="Código cupón" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
-                <button style="background: #bdc3c7; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer;">OK</button>
+            <form action="{% url 'aplicar_cupon' %}" method="POST" style="margin-top: 20px; display: flex; gap: 5px;">
+                {% csrf_token %}
+                <input type="text" name="codigo_cupon" placeholder="Código cupón" value="{{ nombre_cupon|default:'' }}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                <button type="submit" style="background: #2c3e50; color: white; border: none; padding: 0 15px; border-radius: 8px; cursor: pointer;">
+                    <i class="ri-check-line"></i>
+                </button>
+            </form>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    {% if "cupón" in message.message|lower %}
+                    <div style="font-size: 0.8rem; margin-top: 5px; color: {% if message.tags == 'success' %}#27ae60{% else %}#c0392b{% endif %};">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if descuento > 0 %}
+            <div class="summary-row" style="color: #27ae60; font-weight: bold; margin-top: 10px;">
+                <span>Descuento ({{ nombre_cupon }})</span>
+                <span>- ${{ descuento }}</span>
             </div>
+            {% endif %}
 
             <div class="summary-total">
                 <span>Total</span>
-                <span>${{ total }}</span>
+                <span>${{ total_final }}</span>
             </div>
 
             <a href="{% url 'finalizar_compra' %}" class="btn-checkout">

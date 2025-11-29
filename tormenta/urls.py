@@ -29,6 +29,10 @@ urlpatterns = [
     path('favoritos/toggle/<int:producto_id>/', views.toggle_favorito, name='toggle_favorito'),
     path('mis-favoritos/', views.mis_favoritos, name='mis_favoritos'),
 
+    path('carrito/cupon/', views.aplicar_cupon, name='aplicar_cupon'),
+
+    path('dashboard/', views.dashboard_admin, name='dashboard_admin'),
+
 ]
 
 

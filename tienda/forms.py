@@ -36,3 +36,18 @@ class PerfilUpdateForm(forms.ModelForm):
             'codigo_postal': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'CP'}),
             # La foto no lleva widget especial, Django la maneja
         }
+    
+from .models import Review 
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['calificacion', 'comentario']
+        widgets = {
+            'comentario': forms.Textarea(attrs={
+                'class': 'form-input', 
+                'rows': 3, 
+                'placeholder': '¿Qué te pareció este producto?'
+            }),
+            'calificacion': forms.Select(attrs={'class': 'form-input'})
+        }

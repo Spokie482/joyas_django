@@ -31,6 +31,15 @@ class Producto(models.Model):
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
     
+class Cupon(models.Model):
+    codigo = models.CharField(max_length=50, unique=True, help_text="Ej: VERANO2025")
+    descuento = models.IntegerField(help_text="Porcentaje de descuento (0-100)")
+    valido_desde = models.DateTimeField()
+    valido_hasta = models.DateTimeField()
+    activo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.codigo} - {self.descuento}% OFF"
 
 class Orden(models.Model):
     
@@ -105,3 +114,12 @@ class Favorito(models.Model):
     def __str__(self):
         return f"{self.usuario.username} ❤️ {self.producto.nombre}"
     
+class Review(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='reviews')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    comentario = models.TextField(verbose_name="Tu opinión")
+    calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)], verbose_name="Estrellas")
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.producto.nombre} ({self.calificacion}★)"

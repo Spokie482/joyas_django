@@ -236,4 +236,197 @@
                 .catch(error => console.error('Error:', error));
         }
     </script>
+
+    <div style="max-width: 1100px; margin: 60px auto; padding: 0 20px;">
+        
+        <div style="display: flex; gap: 40px; flex-wrap: wrap;">
+            
+            <div style="flex: 1; min-width: 300px;">
+                <div class="glass-review-card">
+                    <h3 style="color: #2c3e50; margin-top: 0; font-weight: 300; text-transform: uppercase; letter-spacing: 1px;">Opiniones</h3>
+                    
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+                        <span style="font-size: 3.5rem; font-weight: bold; color: #2c3e50; line-height: 1;">{{ promedio_stars }}</span>
+                        <div>
+                            <div style="color: #e1b12c; font-size: 1.2rem;">
+                                {% if promedio_stars >= 1 %}★{% else %}☆{% endif %}
+                                {% if promedio_stars >= 2 %}★{% else %}☆{% endif %}
+                                {% if promedio_stars >= 3 %}★{% else %}☆{% endif %}
+                                {% if promedio_stars >= 4 %}★{% else %}☆{% endif %}
+                                {% if promedio_stars >= 5 %}★{% else %}☆{% endif %}
+                            </div>
+                            <span style="color: #95a5a6; font-size: 0.9rem;">Basado en {{ reviews.count }} reseñas</span>
+                        </div>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <form method="post" style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px;">
+                            {% csrf_token %}
+                            <label style="display: block; margin-bottom: 10px; color: #34495e; font-weight: 600;">Deja tu valoración:</label>
+                            
+                            <div style="margin-bottom: 15px;">
+                                {{ form.calificacion }} 
+                            </div>
+                            
+                            {{ form.comentario }}
+                            
+                            <button type="submit" class="btn-review">PUBLICAR OPINIÓN</button>
+                        </form>
+                    {% else %}
+                        <div style="background: rgba(255,255,255,0.5); padding: 20px; border-radius: 15px; text-align: center; border: 1px dashed #bdc3c7;">
+                            <p style="color: #7f8c8d; margin-bottom: 10px;">¿Compraste este producto?</p>
+                            <a href="{% url 'login' %}?next={{ request.path }}" style="color: #e1b12c; font-weight: bold; text-decoration: none;">Inicia sesión para opinar</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="flex: 1.5; min-width: 300px;">
+                <h3 style="color: #2c3e50; font-weight: 300; margin-top: 0; margin-bottom: 20px;">Últimos Comentarios</h3>
+                
+                {% if reviews %}
+                    <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
+                        {% for review in reviews %}
+                        <div class="review-item">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <div style="font-weight: 600; color: #2c3e50;">
+                                    {{ review.usuario.username }}
+                                    <span style="color: #e1b12c; margin-left: 8px; font-size: 0.9rem;">
+                                        {% if review.calificacion == 5 %}★★★★★
+                                        {% elif review.calificacion == 4 %}★★★★☆
+                                        {% elif review.calificacion == 3 %}★★★☆☆
+                                        {% elif review.calificacion == 2 %}★★☆☆☆
+                                        {% else %}★☆☆☆☆{% endif %}
+                                    </span>
+                                </div>
+                                <span style="font-size: 0.8rem; color: #bdc3c7;">{{ review.fecha|date:"d M Y" }}</span>
+                            </div>
+                            <p style="color: #7f8c8d; line-height: 1.5; margin: 0; font-size: 0.95rem;">
+                                "{{ review.comentario }}"
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div style="text-align: center; padding: 40px; color: #95a5a6; background: rgba(255,255,255,0.3); border-radius: 20px;">
+                        <i class="ri-chat-smile-2-line" style="font-size: 2.5rem; display: block; margin-bottom: 10px;"></i>
+                        Aún no hay opiniones. ¡Sé el primero!
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        /* Estilos específicos para Reseñas */
+        .glass-review-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* Inputs del formulario */
+        .glass-review-card textarea, .glass-review-card select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-family: inherit;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .glass-review-card textarea:focus { outline: none; border-color: #e1b12c; }
+
+        .btn-review {
+            background: #2c3e50;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-review:hover { background: #34495e; transform: translateY(-2px); }
+
+        .review-item {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+        .review-item:hover { background: rgba(255, 255, 255, 0.8); }
+    </style>
+
+    {% if relacionados %}
+    <div style="max-width: 1100px; margin: 60px auto;">
+        <h3 style="color: #2c3e50; text-align: center; margin-bottom: 30px; font-weight: 300; text-transform: uppercase; letter-spacing: 2px;">
+            Completa tu Look
+        </h3>
+        
+        <div class="related-grid">
+            {% for rel in relacionados %}
+            <a href="{% url 'detalle' rel.id %}" class="related-card">
+                <div class="related-img-box">
+                    {% if rel.imagen %}
+                        <img src="{{ rel.imagen.url }}" alt="{{ rel.nombre }}">
+                    {% else %}
+                        <div style="height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">Sin Foto</div>
+                    {% endif %}
+                </div>
+                <div class="related-info">
+                    <div class="related-name">{{ rel.nombre|truncatechars:20 }}</div>
+                    <div class="related-price">${{ rel.precio }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        /* CSS ESPECÍFICO PARA RELACIONADOS */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .related-card {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .related-card:hover { 
+            transform: translateY(-5px); 
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .related-img-box {
+            height: 200px;
+            background: #fff;
+            overflow: hidden;
+        }
+        .related-img-box img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .related-info { padding: 15px; text-align: center; }
+        .related-name { color: #2c3e50; font-size: 0.9rem; margin-bottom: 5px; }
+        .related-price { color: #e1b12c; font-weight: bold; }
+    </style>
+    {% endif %}
+
 {% endblock %}

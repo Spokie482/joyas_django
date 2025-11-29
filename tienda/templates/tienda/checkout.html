@@ -161,22 +161,44 @@
         <div class="glass-panel-summary">
             <h2>Resumen del Pedido</h2>
             
-            {% for key, item in request.session.carrito.items %}
-                <div class="summary-item">
-                    <div>
-                        <div class="item-name">{{ item.nombre }}</div>
-                        <small>Cant: {{ item.cantidad }}</small>
+            <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px; padding-right: 10px;">
+                {% for key, item in request.session.carrito.items %}
+                    <div class="summary-item">
+                        <div>
+                            <div class="item-name">{{ item.nombre }}</div>
+                            <small style="color: #95a5a6;">Cant: {{ item.cantidad }}</small>
+                        </div>
+                        <span>${{ item.precio }}</span>
                     </div>
-                    <span>${{ item.precio }}</span>
-                </div>
-            {% endfor %}
-            
-            <div class="summary-item" style="margin-top: 20px; color: #2c3e50; font-weight: bold;">
-                <span>Total a Pagar</span>
+                {% endfor %}
             </div>
             
-            <div class="total-final">
-                ${{ carrito.obtener_total }}
+            <div style="border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 15px;">
+                <div class="summary-item" style="border: none; margin-bottom: 5px; padding: 0;">
+                    <span>Subtotal</span>
+                    <span>${{ subtotal }}</span>
+                </div>
+
+                {% if descuento > 0 %}
+                <div class="summary-item" style="border: none; margin-bottom: 5px; padding: 0; color: #27ae60;">
+                    <span>Descuento</span>
+                    <span>- ${{ descuento }}</span>
+                </div>
+                {% endif %}
+
+                <div class="summary-item" style="border: none; margin-bottom: 5px; padding: 0;">
+                    <span>Envío</span>
+                    {% if costo_envio == 0 %}
+                        <span style="color: #27ae60; font-weight: bold;">Gratis</span>
+                    {% else %}
+                        <span>${{ costo_envio }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="summary-item" style="margin-top: 20px; border-top: 2px solid rgba(0,0,0,0.1); padding-top: 15px; color: #2c3e50; font-weight: bold;">
+                <span style="font-size: 1.2rem;">Total a Pagar</span>
+                <span class="total-final">${{ total_a_pagar }}</span>
             </div>
 
             <div class="secure-badge">

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Producto, Orden, DetalleOrden, Perfil, Favorito
+from .models import Producto, Orden, DetalleOrden, Perfil, Favorito, Cupon
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
@@ -31,3 +31,9 @@ class PerfilAdmin(admin.ModelAdmin):
 class FavoritoAdmin(admin.ModelAdmin):
     list_display = ('usuario', 'producto', 'fecha')
     list_filter = ('fecha',)
+
+@admin.register(Cupon)
+class CuponAdmin(admin.ModelAdmin):
+    list_display = ('codigo', 'descuento', 'activo', 'valido_hasta')
+    list_filter = ('activo', 'valido_hasta')
+    search_fields = ('codigo',)
