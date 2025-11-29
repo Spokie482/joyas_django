@@ -4,7 +4,7 @@
 
 {% block extra_css %}
 <style>
-    /* seccion de presentacion */
+    /* --- HERO SECTION (Igual que antes) --- */
     .hero-landing {
         height: 85vh;
         display: flex;
@@ -14,7 +14,6 @@
         text-align: center;
         position: relative;
         overflow: hidden;
-        /* Fondo abstracto suave */
         background-color: #ebedee;
         background: radial-gradient(circle at 50% 50%, rgba(225, 177, 44, 0.1), transparent 60%);
     }
@@ -23,26 +22,19 @@
         content: "";
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
-        
-        /* cambiar la url de la foto*/
-        /* He puesto una imagen elegante de Unsplash como ejemplo */
         background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070&auto=format&fit=crop'); 
-        
         background-size: cover;
         background-position: center;
-        
-        /* EFECTOS VISUALES */
-        filter: blur(8px) grayscale(30%) brightness(0.9); /* Desenfoque + Desaturación suave */
-        transform: scale(1.1); /* Escala un poco para evitar bordes blancos por el blur */
+        filter: blur(8px) grayscale(30%) brightness(0.9);
+        transform: scale(1.1);
         z-index: 0;
     }
 
-    /* 2. LA CAPA OPAQUE (El tinte del cristal) */
     .hero-landing::after {
         content: "";
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(255, 255, 255, 0.35); /* Capa blanca semitransparente */
+        background: rgba(255, 255, 255, 0.35);
         z-index: 1;
     }
 
@@ -56,10 +48,9 @@
         border-radius: 30px;
         border: 1px solid rgba(255, 255, 255, 0.8);
         box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-        max-width: 800px;
-        animation: floatUp 1.5s ease-out;
         width: 90%;
         max-width: 800px;
+        animation: floatUp 1.5s ease-out;
     }
 
     .big-logo {
@@ -87,121 +78,204 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* --- OFERTAS (Igual que antes) --- */
+    .offers-container {
+        padding: 20px 0;
+        margin-bottom: 40px;
+        position: relative;
+    }
+    .offers-slider {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; 
+        gap: 20px;
+        padding: 20px;
+    }
+    .offers-slider::-webkit-scrollbar { display: none; }
+
+    .offer-glass-card {
+        min-width: 90%;
+        max-width: 1000px;
+        height: 60vh;
+        margin: 0 auto;
+        scroll-snap-align: center;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 30px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        display: flex;
+        overflow: hidden;
+        position: relative;
+    }
+    @media (min-width: 768px) { .offer-glass-card { min-width: 80%; } }
+    @media (max-width: 768px) {
+        .offer-glass-card { flex-direction: column; height: auto; }
+        .offer-img-col { height: 300px; }
+        .offer-info-col { padding: 30px; }
+        .offer-title { font-size: 1.8rem; }
+    }
+
+    .offer-img-col { flex: 1; position: relative; overflow: hidden; }
+    .offer-img-col img { width: 100%; height: 100%; object-fit: cover; transition: transform 10s ease; }
+    .offer-glass-card:hover .offer-img-col img { transform: scale(1.1); }
+    .badge-offer {
+        position: absolute; top: 20px; left: 20px;
+        background: rgba(255, 255, 255, 0.9); color: #c0392b;
+        padding: 8px 15px; font-weight: bold; letter-spacing: 1px;
+        text-transform: uppercase; border-radius: 20px; font-size: 0.8rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
+    }
+    .offer-info-col { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 50px; text-align: left; }
+    .offer-title { font-size: 2.5rem; color: #2c3e50; margin: 0 0 10px 0; font-weight: 300; }
+    .offer-title strong { font-weight: 600; }
+    .price-wrapper { display: flex; align-items: center; gap: 15px; margin: 20px 0; }
+    .price-old { text-decoration: line-through; color: #bdc3c7; font-size: 1.2rem; }
+    .price-new { color: #e1b12c; font-size: 2.5rem; font-weight: 600; }
+    .offer-desc { font-size: 1rem; color: #7f8c8d; margin-bottom: 30px; line-height: 1.6; max-width: 90%; }
+    .slider-nav { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 10; pointer-events: none; }
+    .nav-btn { pointer-events: auto; background: rgba(255, 255, 255, 0.8); color: #2c3e50; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: 0.3s; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .nav-btn:hover { background: #2c3e50; color: white; transform: scale(1.1); }
+
     /* --- CATÁLOGO --- */
     .catalogo-section { padding: 50px 20px; }
-
-    .category-bar {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin-bottom: 50px;
-        flex-wrap: wrap;
-    }
-
+    .category-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; }
     .cat-btn {
-        background: rgba(255,255,255,0.5);
-        border: 1px solid rgba(0,0,0,0.05);
-        color: #7f8c8d;
+        background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.05); color: #7f8c8d;
+        padding: 10px 30px; border-radius: 30px; text-decoration: none;
+        text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; transition: 0.3s;
+    }
+    .cat-btn:hover, .cat-btn.active { background: #2c3e50; color: #fff; box-shadow: 0 5px 15px rgba(44, 62, 80, 0.2); }
+
+    /* --- 🆕 ESTILOS FILTROS OFF-CANVAS & TOOLBAR --- */
+    
+    /* 1. Botón "Abrir Filtros" (Solo Móvil) */
+    .btn-open-filters {
+        display: none; /* Oculto por defecto */
+        margin: 0 auto 30px auto;
+        background: #2c3e50; color: white;
+        border: none; padding: 10px 25px; border-radius: 50px;
+        font-weight: 600; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        align-items: center; gap: 10px;
+    }
+
+    /* 2. Toolbar por defecto (Escritorio) */
+    .glass-toolbar {
+        max-width: 900px;
+        margin: 0 auto 40px auto;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        border-radius: 50px;
         padding: 10px 30px;
-        border-radius: 30px; /* Estilo píldora */
-        text-decoration: none;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        transition: transform 0.3s ease;
     }
 
-    .cat-btn:hover, .cat-btn.active {
-        background: #2c3e50;
-        color: #fff;
-        box-shadow: 0 5px 15px rgba(44, 62, 80, 0.2);
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 40px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* TARJETA GLASSMORPHISM */
-    .card {
-        /* Hereda el estilo glass-panel pero lo personalizamos */
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        overflow: hidden;
-        transition: all 0.4s ease;
-        position: relative;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    }
-    
-    .card:hover { 
-        transform: translateY(-10px); 
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
-        background: rgba(255, 255, 255, 0.95);
-    }
-
-    .card-img-container {
-        width: 100%;
-        height: 300px;
-        overflow: hidden;
-        background: #fdfdfd;
-        position: relative;
-    }
-
-    .card-img { 
-        width: 100%; 
-        height: 100%; 
-        object-fit: contain; 
-        transition: transform 0.5s ease; 
-        mix-blend-mode: multiply; /* Truco para que la foto se funda con el fondo blanco */
-    }
-    
-    .card:hover .card-img { transform: scale(1.05); }
-    
-    .card-info { padding: 25px; text-align: center; }
-    
-    .card-title { 
-        font-size: 1rem; 
-        color: #2c3e50; 
-        margin: 10px 0; 
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .card-price { 
-        color: #e1b12c; 
-        font-size: 1.3rem; 
-        font-weight: 300; 
-        margin-bottom: 15px;
-    }
-
-    /* Botón de Favoritos Flotante */
-    .btn-fav {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(255,255,255,0.8);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        cursor: pointer;
-        color: #ccc;
+    .toolbar-form {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
-        transition: 0.3s;
-        z-index: 10;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    /* Botón Cerrar (Solo dentro del Off-canvas móvil) */
+    .btn-close-filters { display: none; }
+
+    /* 3. Transformación a Off-Canvas en Móvil */
+    @media (max-width: 768px) {
+        .btn-open-filters { display: flex; } /* Mostrar botón activador */
+
+        .glass-toolbar {
+            position: fixed;
+            top: 0; left: -100%; /* Oculto a la izquierda */
+            width: 85%; height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 0 20px 20px 0; /* Bordes rectos a la izq */
+            z-index: 2000;
+            flex-direction: column;
+            padding: 40px 20px;
+            margin: 0;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .glass-toolbar.active { left: 0; } /* Mostrar */
+
+        .toolbar-form {
+            flex-direction: column;
+            align-items: stretch; /* Que los inputs ocupen todo el ancho */
+            gap: 25px;
+        }
+
+        .btn-close-filters {
+            display: block;
+            position: absolute; top: 15px; right: 15px;
+            background: none; border: none; font-size: 1.5rem;
+            color: #7f8c8d; cursor: pointer;
+        }
+        
+        .filter-title-mobile {
+            display: block !important;
+            font-size: 1.5rem; font-weight: bold; color: #2c3e50;
+            margin-bottom: 30px; text-align: center;
+        }
+    }
+
+    /* Estilos generales de inputs */
+    .filter-group { display: flex; align-items: center; gap: 10px; }
+    .filter-group input, .filter-group select {
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 20px; padding: 12px 15px;
+        color: #2c3e50; font-family: inherit; outline: none; width: 100%;
+    }
+    .btn-filter {
+        background: #2c3e50; color: #fff; border: none;
+        padding: 12px 30px; border-radius: 50px;
+        cursor: pointer; font-weight: 600; font-size: 0.9rem;
+        transition: 0.3s; width: 100%;
+    }
+    .btn-filter:hover { background: #34495e; }
+    .btn-clean {
+        color: #e74c3c; text-decoration: none; font-weight: bold;
+        padding: 10px; text-align: center; display: block;
+    }
+
+    /* --- TARJETAS --- */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+    .card { background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 20px; overflow: hidden; transition: all 0.4s ease; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+    .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); background: rgba(255, 255, 255, 0.95); }
+    .card-img-container { width: 100%; height: 300px; overflow: hidden; background: #fdfdfd; position: relative; }
+    .card-img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.5s ease; mix-blend-mode: multiply; }
+    .card:hover .card-img { transform: scale(1.05); }
+    .card-info { padding: 25px; text-align: center; }
+    .card-title { font-size: 1rem; color: #2c3e50; margin: 10px 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .card-price { color: #e1b12c; font-size: 1.3rem; font-weight: 300; margin-bottom: 15px; }
+    
+    .btn-fav {
+        position: absolute; top: 15px; right: 15px;
+        background: rgba(255,255,255,0.8); border: none; border-radius: 50%;
+        width: 40px; height: 40px; cursor: pointer; color: #ccc;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem; transition: 0.3s; z-index: 10;
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
     .btn-fav:hover { transform: scale(1.1); color: #e74c3c; }
     .btn-fav.active { color: #e74c3c; background: #fff; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.2); }
 
+    /* Fondo oscuro al abrir filtros (Backdrop) */
+    .filter-backdrop {
+        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 1999; backdrop-filter: blur(5px);
+    }
+    .filter-backdrop.active { display: block; }
 </style>
 {% endblock %}
 
@@ -219,163 +293,7 @@
     </div>
     {% endif %}
 
-
     {% if not categoria_actual and ofertas %}
-    <style>
-        .offers-container {
-            padding: 20px 0;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .offers-slider {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            /* Ocultar barra de scroll visualmente pero mantener funcionalidad */
-            scrollbar-width: none; 
-            gap: 20px;
-            padding: 20px; /* Espacio para la sombra */
-        }
-        .offers-slider::-webkit-scrollbar { display: none; }
-
-        .offer-glass-card {
-            min-width: 90%; /* En móvil casi pantalla completa */
-            max-width: 1000px;
-            height: 60vh; /* Altura dinámica */
-            margin: 0 auto;
-            scroll-snap-align: center;
-            
-            /* ESTILO GLASS */
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            
-            display: flex;
-            overflow: hidden;
-            position: relative;
-        }
-
-        @media (min-width: 768px) {
-            .offer-glass-card { min-width: 80%; }
-        }
-
-        /* Columna Imagen */
-        .offer-img-col {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-        .offer-img-col img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 10s ease; /* Efecto zoom lento */
-        }
-        .offer-glass-card:hover .offer-img-col img { transform: scale(1.1); }
-
-        .badge-offer {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #c0392b;
-            padding: 8px 15px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-        }
-
-        /* Columna Info */
-        .offer-info-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 50px;
-            text-align: left;
-        }
-
-        .offer-title {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin: 0 0 10px 0;
-            font-weight: 300;
-        }
-        
-        .offer-title strong { font-weight: 600; }
-
-        .price-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .price-old {
-            text-decoration: line-through;
-            color: #bdc3c7;
-            font-size: 1.2rem;
-        }
-        .price-new {
-            color: #e1b12c; /* Dorado */
-            font-size: 2.5rem;
-            font-weight: 600;
-        }
-
-        .offer-desc {
-            font-size: 1rem;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            max-width: 90%;
-        }
-
-        /* Navegación */
-        .slider-nav {
-            position: absolute;
-            bottom: 40px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            z-index: 10;
-            pointer-events: none; /* Para que no tape clicks */
-        }
-        .nav-btn {
-            pointer-events: auto;
-            background: rgba(255, 255, 255, 0.8);
-            color: #2c3e50;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        .nav-btn:hover { background: #2c3e50; color: white; transform: scale(1.1); }
-
-        @media (max-width: 768px) {
-            .offer-glass-card { flex-direction: column; height: auto; }
-            .offer-img-col { height: 300px; }
-            .offer-info-col { padding: 30px; }
-            .offer-title { font-size: 1.8rem; }
-        }
-    </style>
-
     <div class="offers-container">
         <div class="offers-slider" id="slider">
             {% for oferta in ofertas %}
@@ -388,7 +306,6 @@
                         <div style="width:100%; height:100%; background:#ecf0f1; display:flex; align-items:center; justify-content:center; color:#95a5a6;">Sin imagen</div>
                     {% endif %}
                 </div>
-
                 <div class="offer-info-col">
                     <h2 class="offer-title">{{ oferta.nombre }}</h2>
                     <div class="price-wrapper">
@@ -396,7 +313,6 @@
                         <span class="price-new">${{ oferta.precio_oferta }}</span>
                     </div>
                     <p class="offer-desc">{{ oferta.descripcion|truncatewords:25 }}</p>
-                    
                     <a href="{% url 'agregar_carrito' oferta.id %}" class="btn-gold" style="text-align: center; max-width: 200px; box-shadow: 0 10px 20px rgba(225, 177, 44, 0.3);">
                         Lo quiero <i class="ri-shopping-bag-3-line" style="vertical-align: middle; margin-left:5px;"></i>
                     </a>
@@ -404,20 +320,14 @@
             </div>
             {% endfor %}
         </div>
-
         {% if ofertas|length > 1 %}
         <div class="slider-nav">
-            <button class="nav-btn" onclick="document.getElementById('slider').scrollBy({left: -window.innerWidth/2, behavior: 'smooth'})">
-                <i class="ri-arrow-left-line"></i>
-            </button>
-            <button class="nav-btn" onclick="document.getElementById('slider').scrollBy({left: window.innerWidth/2, behavior: 'smooth'})">
-                <i class="ri-arrow-right-line"></i>
-            </button>
+            <button class="nav-btn" onclick="document.getElementById('slider').scrollBy({left: -window.innerWidth/2, behavior: 'smooth'})"><i class="ri-arrow-left-line"></i></button>
+            <button class="nav-btn" onclick="document.getElementById('slider').scrollBy({left: window.innerWidth/2, behavior: 'smooth'})"><i class="ri-arrow-right-line"></i></button>
         </div>
         {% endif %}
     </div>
     {% endif %}
-    ```
 
     <div id="catalogo-start" class="catalogo-section">
         
@@ -428,7 +338,17 @@
             <a href="?categoria=PU#catalogo-start" class="cat-btn {% if categoria_actual == 'PU' %}active{% endif %}">Pulseras</a>
         </div>
 
-        <div class="glass-toolbar">
+        <button class="btn-open-filters" onclick="toggleFilters()">
+            <i class="ri-filter-3-line"></i> Filtrar y Ordenar
+        </button>
+
+        <div class="filter-backdrop" id="filterBackdrop" onclick="toggleFilters()"></div>
+
+        <div class="glass-toolbar" id="filterToolbar">
+            
+            <button class="btn-close-filters" onclick="toggleFilters()"><i class="ri-close-line"></i></button>
+            <div class="filter-title-mobile" style="display:none;">Filtros</div>
+
             <form method="GET" class="toolbar-form" id="filterForm">
                 
                 {% if categoria_actual %}
@@ -452,91 +372,30 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn-filter">FILTRAR</button>
+                <button type="submit" class="btn-filter">Aplicar Filtros</button>
                 
                 {% if request.GET.min_price or request.GET.max_price or request.GET.orden %}
-                    <a href="{% url 'catalogo' %}" class="btn-clean" title="Limpiar filtros">✕</a>
+                    <a href="{% url 'catalogo' %}" class="btn-clean" title="Limpiar filtros">Borrar todo</a>
                 {% endif %}
             </form>
         </div>
-
-        <style>
-            /* ESTILOS GLASS TOOLBAR */
-            .glass-toolbar {
-                max-width: 900px;
-                margin: 0 auto 40px auto;
-                background: rgba(255, 255, 255, 0.5);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.8);
-                border-radius: 50px;
-                padding: 10px 30px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            }
-            
-            .toolbar-form {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 20px;
-                flex-wrap: wrap;
-            }
-
-            .filter-group {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .filter-group input, .filter-group select {
-                background: rgba(255, 255, 255, 0.8);
-                border: 1px solid rgba(0,0,0,0.1);
-                border-radius: 20px;
-                padding: 8px 15px;
-                color: #2c3e50;
-                font-family: inherit;
-                outline: none;
-            }
-
-            .btn-filter {
-                background: #2c3e50;
-                color: #fff;
-                border: none;
-                padding: 8px 20px;
-                border-radius: 20px;
-                cursor: pointer;
-                font-weight: 600;
-                font-size: 0.8rem;
-                transition: 0.3s;
-            }
-            .btn-filter:hover { background: #34495e; }
-
-            .btn-clean {
-                color: #e74c3c;
-                text-decoration: none;
-                font-weight: bold;
-                padding: 5px;
-            }
-        </style>
-
 
         <div class="grid">
             {% for joya in joyas %}
             <div class="card">
                 
                 <div class="card-info">
-                        <h3 class="card-title">{{ joya.nombre }}</h3>
-                        <div class="card-price">${{ joya.precio }}</div>
-                        
-                        {% if joya.stock == 0 %}
-                            <span style="color: #e74c3c; font-size: 0.8rem; font-weight: bold;">🚫 AGOTADO</span>
-                        {% elif joya.stock <= 3 %}
-                            <span style="color: #e67e22; font-size: 0.8rem; font-weight: bold;">⚠️ ¡Últimas {{ joya.stock }}!</span>
-                        {% else %}
-                            <span style="color: #95a5a6; font-size: 0.8rem;">Ver Joya</span>
-                        {% endif %}
+                    <h3 class="card-title">{{ joya.nombre }}</h3>
+                    <div class="card-price">${{ joya.precio }}</div>
+                    
+                    {% if joya.stock == 0 %}
+                        <span style="color: #e74c3c; font-size: 0.8rem; font-weight: bold;">🚫 AGOTADO</span>
+                    {% elif joya.stock <= 3 %}
+                        <span style="color: #e67e22; font-size: 0.8rem; font-weight: bold;">⚠️ ¡Últimas {{ joya.stock }}!</span>
+                    {% else %}
+                        <span style="color: #95a5a6; font-size: 0.8rem;">Ver Joya</span>
+                    {% endif %}
                 </div>
-                
-                
                 
                 <button class="btn-fav" onclick="toggleFavorito({{ joya.id }}, this)">
                     {% if user.is_authenticated and joya in user.favoritos.all %} 
@@ -571,7 +430,15 @@
     </div>
     
     <script>
-        // Mismo script de favoritos
+        // Función para abrir/cerrar filtros en móvil
+        function toggleFilters() {
+            const toolbar = document.getElementById('filterToolbar');
+            const backdrop = document.getElementById('filterBackdrop');
+            toolbar.classList.toggle('active');
+            backdrop.classList.toggle('active');
+        }
+
+        // Script de Favoritos
         function toggleFavorito(productoId, btn) {
             {% if not user.is_authenticated %}
                 window.location.href = "{% url 'login' %}";

@@ -189,7 +189,7 @@ def ver_carrito(request):
 
     total_final = total - descuento_monto
     
-    LIMITE_ENVIO_GRATIS = 15000
+    LIMITE_ENVIO_GRATIS = 30000
     
     
     falta_para_envio = LIMITE_ENVIO_GRATIS - total_final
@@ -237,7 +237,7 @@ def finalizar_compra(request):
     total_con_descuento = subtotal - descuento_monto
 
     # 3. Envío
-    LIMITE_ENVIO_GRATIS = 100000
+    LIMITE_ENVIO_GRATIS = 30000
     COSTO_ENVIO_FIJO = 5000 # 👈 Define aquí cuánto cuesta el envío normal
     
     costo_envio = 0

@@ -1,5 +1,18 @@
 {% extends 'tienda/base.html' %}
 
+{% block meta %}
+    <meta name="description" content="{{ joya.descripcion|truncatewords:20 }}">
+    <meta property="og:title" content="{{ joya.nombre }} | Angel Wings Jewelry">
+    <meta property="og:description" content="{{ joya.descripcion|truncatewords:30 }} - Precio: ${{ joya.precio }}">
+    {% if joya.imagen %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ joya.imagen.url }}">
+    {% endif %}
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="product">
+    <meta property="product:price:amount" content="{{ joya.precio }}">
+    <meta property="product:price:currency" content="ARS">
+{% endblock %}
+
 {% block title %}{{ joya.nombre }}{% endblock %}
 
 {% block extra_css %}
@@ -147,6 +160,30 @@
     .btn-fav-detail:hover { color: #e74c3c; background: #fff; }
     .btn-fav-detail.active { color: #e74c3c; background: #fff; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.2); }
 
+    .btn-whatsapp-share {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 50px;
+        background: rgba(37, 211, 102, 0.1); /* Fondo verde muy suave (Glass) */
+        color: #20b859; /* Verde WhatsApp */
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: 1px solid rgba(37, 211, 102, 0.2);
+        transition: 0.3s;
+    }
+    
+    .btn-whatsapp-share:hover {
+        background: #25D366;
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+
 </style>
 {% endblock %}
 
@@ -201,6 +238,14 @@
                         <i class="ri-heart-line"></i>
                     {% endif %}
                 </button>
+            </div>
+
+            <div style="margin-top: 15px;">
+                <a href="https://wa.me/?text=¡Hola! Mira esta joya increíble que encontré en Angel Wings: {{ joya.nombre }} 👉 {{ request.build_absolute_uri }}" 
+                   target="_blank" 
+                   class="btn-whatsapp-share">
+                    <i class="ri-whatsapp-line" style="font-size: 1.2rem;"></i> Compartir con alguien
+                </a>
             </div>
 
             <div style="margin-top: 30px; display: flex; gap: 20px; color: #95a5a6; font-size: 0.8rem;">

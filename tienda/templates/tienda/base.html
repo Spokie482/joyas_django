@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ebedee">
     
+    {% block meta %}
+    <meta name="description" content="Angel Wings Jewelry - Joyas de diseño exclusivo inspiradas en la naturaleza y el cristal. Envíos a todo el país.">
+    <meta property="og:title" content="Angel Wings | Joyería Exclusiva">
+    <meta property="og:description" content="Descubre nuestra colección Liquid Glass. Joyas únicas para momentos inolvidables.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070"> <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="website">
+    {% endblock %}
+    
     <title>Tormenta | {% block title %}Joyería{% endblock %}</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
@@ -356,11 +364,20 @@
         </div>
     </footer>
 
-   <div class="fab-container">
+ <div class="fab-container">
     <button class="fab-main"><i class="ri-add-line"></i></button>
-    <a href="#" class="fab-social"><i class="ri-whatsapp-line"></i></a>
-    <a href="#" class="fab-social"><i class="ri-instagram-line"></i></a>
-    <a href="#" class="fab-social"><i class="ri-facebook-fill"></i></a>
+    
+    <a href="https://wa.me/5491112345678" target="_blank" class="fab-social" title="WhatsApp">
+        <i class="ri-whatsapp-line"></i>
+    </a>
+    
+    <a href="https://instagram.com/angelwings_joyas" target="_blank" class="fab-social" title="Instagram">
+        <i class="ri-instagram-line"></i>
+    </a>
+    
+    <a href="https://facebook.com/angelwings.joyas" target="_blank" class="fab-social" title="Facebook">
+        <i class="ri-facebook-fill"></i>
+    </a>
    </div>
 
    <script>
