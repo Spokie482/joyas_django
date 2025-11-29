@@ -429,6 +429,21 @@
             {% for joya in joyas %}
             <div class="card">
                 
+                <div class="card-info">
+                        <h3 class="card-title">{{ joya.nombre }}</h3>
+                        <div class="card-price">${{ joya.precio }}</div>
+                        
+                        {% if joya.stock == 0 %}
+                            <span style="color: #e74c3c; font-size: 0.8rem; font-weight: bold;">🚫 AGOTADO</span>
+                        {% elif joya.stock <= 3 %}
+                            <span style="color: #e67e22; font-size: 0.8rem; font-weight: bold;">⚠️ ¡Últimas {{ joya.stock }}!</span>
+                        {% else %}
+                            <span style="color: #95a5a6; font-size: 0.8rem;">Ver Joya</span>
+                        {% endif %}
+                </div>
+                
+                
+                
                 <button class="btn-fav" onclick="toggleFavorito({{ joya.id }}, this)">
                     {% if user.is_authenticated and joya in user.favoritos.all %} 
                         <i class="ri-heart-fill"></i>

@@ -16,8 +16,9 @@ class DetalleOrdenInline(admin.TabularInline):
 
 @admin.register(Orden)
 class OrdenAdmin(admin.ModelAdmin):
-    list_display = ('id', 'usuario', 'fecha', 'total')
-    list_filter = ('fecha',)
+    list_display = ('id', 'usuario', 'fecha', 'total', 'estado')
+    list_filter = ('fecha', 'estado')
+    list_editable = ('estado',)
     inlines = [DetalleOrdenInline]
 
 # --- NUEVOS REGISTROS ---

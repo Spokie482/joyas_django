@@ -4,48 +4,236 @@
 
 {% block extra_css %}
 <style>
-    /* Estilos específicos para el detalle */
-    .detail-container {
+    /* --- CONTENEDOR PRINCIPAL GLASS --- */
+    .detail-glass-card {
+        max-width: 1100px;
+        margin: 60px auto;
         display: flex;
-        background: #111;
-        max-width: 900px;
-        width: 100%;
-        margin: 50px auto;
-        border: 1px solid #333;
-        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        flex-wrap: wrap;
+        
+        /* Efecto Cristal Líquido */
+        background: rgba(250, 234, 249, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(247, 236, 246, 0.65);
+        border-radius: 30px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        overflow: hidden; /* Para que la imagen respete el borde redondeado */
     }
-    .img-section { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; }
-    .img-section img { max-width: 100%; max-height: 500px; object-fit: contain; }
+
+    /* --- COLUMNA IZQUIERDA: IMAGEN --- */
+    .img-section {
+        flex: 1;
+        min-width: 350px;
+        background: rgba(255, 255, 255, 0.5); /* Fondo ligeramente más claro para la foto */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        position: relative;
+    }
+
+    .img-section img {
+        max-width: 100%;
+        max-height: 500px;
+        object-fit: contain;
+        /* Sombra suave debajo de la joya para que flote */
+        filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));
+        transition: transform 0.3s ease;
+    }
+    .img-section img:hover { transform: scale(1.05); }
     
-    .info-section { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-    h1 { color: #d4af37; font-size: 2.5rem; margin-bottom: 10px; }
-    .price { font-size: 2rem; color: #fff; margin-bottom: 20px; font-weight: bold;}
-    .desc { color: #aaa; line-height: 1.6; margin-bottom: 30px; }
+    /* Etiqueta de Oferta Flotante */
+    .offer-badge-detail {
+        z-index: 10;
+        position: absolute;
+        top: 30px; left: 30px;
+        background: #e1b12c;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        box-shadow: 0 5px 15px rgba(225, 177, 44, 0.4);
+    }
     
-    .btn-back { color: #666; text-decoration: none; margin-bottom: 20px; display: inline-block;}
+    /* --- COLUMNA DERECHA: INFORMACIÓN --- */
+    .info-section {
+        flex: 1;
+        min-width: 350px;
+        padding: 50px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .btn-back {
+        color: #95a5a6;
+        text-decoration: none;
+        margin-bottom: 25px;
+        display: inline-flex;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: 0.2s;
+    }
+    .btn-back:hover { color: #2c3e50; transform: translateX(-5px); }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+        font-weight: 300; /* Tipografía fina y elegante */
+    }
+
+    .price-box {
+        display: flex;
+        align-items: baseline;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .price-current {
+        font-size: 2.5rem;
+        color: #e1b12c; /* Dorado */
+        font-weight: 600;
+    }
+    
+    .price-old {
+        text-decoration: line-through;
+        color: #bdc3c7;
+        font-size: 1.5rem;
+    }
+
+    .desc {
+        color: #7f8c8d;
+        line-height: 1.8;
+        margin-bottom: 40px;
+        font-size: 1rem;
+    }
+
+    .actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .btn-add-cart {
+        flex: 1;
+        background: #2c3e50;
+        color: #fff;
+        text-decoration: none;
+        padding: 15px;
+        text-align: center;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.2);
+    }
+    .btn-add-cart:hover { background: #34495e; transform: translateY(-3px); }
+
+    .btn-fav-detail {
+        width: 50px; height: 50px;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        color: #ccc; font-size: 1.5rem;
+        transition: 0.3s;
+    }
+    .btn-fav-detail:hover { color: #e74c3c; background: #fff; }
+    .btn-fav-detail.active { color: #e74c3c; background: #fff; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.2); }
+
 </style>
 {% endblock %}
 
 {% block content %}
-    <div class="detail-container">
+    <div class="detail-glass-card">
+        
         <div class="img-section">
+            {% if joya.en_oferta %}
+                <span class="offer-badge-detail">Oferta</span>
+            {% endif %}
+            
             {% if joya.imagen %}
                 <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}">
             {% else %}
-                <p>Sin Imagen</p>
+                <div style="color: #bdc3c7; font-size: 1.2rem;">Sin Imagen Disponible</div>
             {% endif %}
         </div>
+        
         <div class="info-section">
-            <a href="{% url 'catalogo' %}" class="btn-back">← Volver al catálogo</a>
+            <a href="{% url 'catalogo' %}" class="btn-back">
+                <i class="ri-arrow-left-line" style="margin-right: 5px;"></i> Volver al catálogo
+            </a>
+            
             <h1>{{ joya.nombre }}</h1>
-            <div class="price">${{ joya.precio }}</div>
+            
+            <div class="price-box">
+                {% if joya.en_oferta %}
+                    <span class="price-old">${{ joya.precio }}</span>
+                    <span class="price-current">${{ joya.precio_oferta }}</span>
+                {% else %}
+                    <span class="price-current">${{ joya.precio }}</span>
+                {% endif %}
+            </div>
+            
             <p class="desc">{{ joya.descripcion }}</p>
             
-            <a href="{% url 'agregar_carrito' joya.id %}"
-               class="btn-gold" 
-               target="_blank">
-               Agregar al carrito
-            </a>
+            <div class="actions">
+                {% if joya.stock > 0 %}
+                    <a href="{% url 'agregar_carrito' joya.id %}" class="btn-add-cart">
+                        AGREGAR A LA BOLSA <i class="ri-shopping-bag-3-line" style="margin-left: 10px;"></i>
+                    </a>
+                {% else %}
+                    <button class="btn-add-cart" style="background: #bdc3c7; cursor: not-allowed; box-shadow: none;">
+                        AGOTADO
+                    </button>
+                {% endif %}
+
+                <button class="btn-fav-detail {% if user.is_authenticated and joya in user.favoritos.all %}active{% endif %}" onclick="toggleFavoritoDetail({{ joya.id }}, this)">
+                    {% if user.is_authenticated and joya in user.favoritos.all %} 
+                        <i class="ri-heart-fill"></i>
+                    {% else %}
+                        <i class="ri-heart-line"></i>
+                    {% endif %}
+                </button>
+            </div>
+
+            <div style="margin-top: 30px; display: flex; gap: 20px; color: #95a5a6; font-size: 0.8rem;">
+                <span><i class="ri-shield-check-line"></i> Calidad asegurada</span>
+                <span><i class="ri-truck-line"></i> Envíos a todo el pais</span>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        // Script de Favoritos (Reutilizamos la lógica pero con el nombre nuevo de la función)
+        function toggleFavoritoDetail(productoId, btn) {
+            {% if not user.is_authenticated %}
+                window.location.href = "{% url 'login' %}";
+                return;
+            {% endif %}
+
+            fetch(`/favoritos/toggle/${productoId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    const icon = btn.querySelector('i');
+                    if (data.agregado) {
+                        icon.classList.remove('ri-heart-line');
+                        icon.classList.add('ri-heart-fill');
+                        btn.classList.add('active');
+                    } else {
+                        icon.classList.remove('ri-heart-fill');
+                        icon.classList.add('ri-heart-line');
+                        btn.classList.remove('active');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 {% endblock %}

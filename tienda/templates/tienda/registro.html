@@ -1,58 +1,142 @@
 {% extends 'tienda/base.html' %}
 
-{% block title %}Crear Cuenta VIP{% endblock %}
+{% block title %}Crear Cuenta{% endblock %}
 
 {% block extra_css %}
 <style>
-    .form-container {
-        max-width: 400px;
-        margin: 50px auto;
-        padding: 40px;
-        background: #111;
-        border: 1px solid #333;
-        border-top: 3px solid #d4af37;
-        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    .auth-container {
+        min-height: 90vh; /* Un poco más alto porque el form es largo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
     }
-    
-    h2 { text-align: center; color: #d4af37; margin-bottom: 30px; }
-    
-    /* Estilos para los campos que genera Django automáticamente */
-    p { margin-bottom: 15px; }
-    label { display: block; color: #aaa; margin-bottom: 5px; }
-    input { 
-        width: 100%; 
-        padding: 10px; 
-        background: #222; 
-        border: 1px solid #444; 
-        color: white; 
-        box-sizing: border-box; /* Para que el padding no rompa el ancho */
-    }
-    input:focus { outline: none; border-color: #d4af37; }
-    
-    .helptext { display: none; } /* Ocultamos textos de ayuda largos para limpiar el diseño */
-    
-    .btn-submit {
+
+    .glass-register-card {
         width: 100%;
-        padding: 12px;
-        background: #d4af37;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: 0.3s;
+        max-width: 450px;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 30px;
+        padding: 50px 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        animation: floatUp 0.8s ease-out;
     }
-    .btn-submit:hover { background: #fff; }
+
+    @keyframes floatUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        color: #2c3e50;
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 0;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        font-size: 0.9rem;
+    }
+
+    /* Estilizamos los campos que genera Django automáticamente */
+    p { margin-bottom: 20px; }
+    
+    label { 
+        display: block; 
+        color: #7f8c8d; 
+        margin-bottom: 5px; 
+        font-size: 0.9rem; 
+        font-weight: 500;
+    }
+    
+    /* Selector universal para inputs dentro del form */
+    input { 
+        width: 100%;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 10px;
+        color: #2c3e50;
+        box-sizing: border-box;
+        transition: 0.3s;
+        font-family: inherit;
+    }
+    input:focus { 
+        outline: none; 
+        border-color: #e1b12c; 
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(225, 177, 44, 0.1);
+    }
+    
+    .helptext { 
+        display: block; 
+        font-size: 0.75rem; 
+        color: #bdc3c7; 
+        margin-top: 5px; 
+        line-height: 1.4;
+    }
+    
+    ul.errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+        color: #e74c3c;
+        font-size: 0.8rem;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 15px;
+        background: #e1b12c; /* Dorado para diferenciarlo */
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+        box-shadow: 0 10px 20px rgba(225, 177, 44, 0.3);
+    }
+    .btn-register:hover {
+        background: #f39c12;
+        transform: translateY(-2px);
+    }
+    
+    .back-link {
+        text-align: center;
+        margin-top: 20px;
+        display: block;
+        color: #95a5a6;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    .back-link:hover { color: #2c3e50; }
+
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <h2>Registro VIP</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+<div class="auth-container">
+    <div class="glass-register-card">
+        <h2>Crear Cuenta</h2>
+        <p class="subtitle">Únete a Tormenta Jewelry</p>
         
-        <button type="submit" class="btn-submit">CREAR CUENTA</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <button type="submit" class="btn-register">REGISTRARME</button>
+        </form>
+        
+        <a href="{% url 'login' %}" class="back-link">¿Ya tienes cuenta? Ingresar</a>
+    </div>
 </div>
 {% endblock %}

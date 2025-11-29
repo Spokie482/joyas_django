@@ -84,12 +84,96 @@
         main { flex: 1; padding: 20px; }
 
         footer {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255,255,255,0.5);
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(0,0,0,0.05);
+            .main-footer {
+                margin-top: auto; /* Empuja el footer al fondo si hay poco contenido */
+                background: linear-gradient(to bottom, rgba(255,255,255,0.7), rgba(255,255,255,0.95));
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.8);
+                padding: 60px 20px 20px;
+                color: var(--text-secondary);
+                position: relative;
+                z-index: 10;
+            }
+
+            .footer-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 50px;
+            }
+
+            .footer-col h4 {
+                color: var(--text-main);
+                font-size: 1.1rem;
+                margin-bottom: 25px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-weight: 600;
+                position: relative;
+                display: inline-block;
+            }
+
+            /* Pequeña línea decorativa bajo los títulos */
+            .footer-col h4::after {
+                content: '';
+                position: absolute;
+                width: 30px;
+                height: 2px;
+                background: var(--accent-color);
+                bottom: -8px;
+                left: 0;
+            }
+
+            .footer-text {
+                line-height: 1.8;
+                font-size: 0.9rem;
+                color: #7f8c8d;
+            }
+
+            .footer-links {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .footer-links li { margin-bottom: 12px; }
+
+            .footer-links a {
+                color: #7f8c8d;
+                text-decoration: none;
+                transition: 0.3s;
+                font-size: 0.95rem;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .footer-links a:hover {
+                color: var(--accent-color);
+                transform: translateX(5px);
+            }
+
+            .contact-item {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 20px;
+                gap: 15px;
+            }
+            .contact-icon {
+                color: var(--accent-color);
+                font-size: 1.2rem;
+                margin-top: 3px;
+            }
+
+            .copyright-bar {
+                text-align: center;
+                margin-top: 60px;
+                padding-top: 20px;
+                border-top: 1px solid rgba(0,0,0,0.05);
+                font-size: 0.8rem;
+                color: #95a5a6;
+            }
         }
 
         /* --- BOTONES MODERNOS --- */
@@ -216,12 +300,75 @@
     </nav>
 
     <main>
+        
+        {% if messages %}
+            <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+                {% for message in messages %}
+                    <div style="
+                        padding: 15px; 
+                        border-radius: 10px; 
+                        margin-bottom: 10px;
+                        {% if message.tags == 'error' %} background: #fadbd8; color: #c0392b; border: 1px solid #e6b0aa; 
+                        {% else %} background: #d4efdf; color: #27ae60; border: 1px solid #a9dfbf; {% endif %}
+                    ">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
-        &copy; 2025 Tormenta Jewelry. Estilo y pureza.
+    
+    <footer class="main-footer">
+        <div class="footer-content">
+            
+            <div class="footer-col">
+                <h4>Nuestra Historia</h4>
+                <p class="footer-text">
+                    <strong>Angel Wings</strong> Nace con la idea de traer los productos de mejor calidad a un buen precio para las que buscan una atencion personalizada y rapida.
+                </p>
+                <div style="margin-top: 20px;">
+                    <span style="font-family: 'Georgia', serif; font-style: italic; color: var(--text-main);">Angel Wings Jewelry</span>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Explorar</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'catalogo' %}">Catálogo Completo</a></li>
+                    <li><a href="?categoria=AN">Anillos Exclusivos</a></li>
+                    <li><a href="?categoria=CO">Collares de Diseño</a></li>
+                    <li><a href="{% url 'editar_perfil' %}">Mi Cuenta VIP</a></li>
+                    </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                
+                <div class="contact-item">
+                    <i class="ri-map-pin-line contact-icon"></i>
+                    <span class="footer-text">Tienda Online<br>Chaco, Argentina</span>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="ri-mail-send-line contact-icon"></i>
+                    <span class="footer-text">contacto@angelwings.com</span>
+                </div>
+
+                <div class="contact-item">
+                    <i class="ri-whatsapp-line contact-icon"></i>
+                    <span class="footer-text">+54 9 11 1234-5678<br><small>Lun-Vie: 9am - 6pm</small></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="copyright-bar">
+            &copy; 2025 Angel Wings Jewelry. Todos los derechos reservados.
+        </div>
     </footer>
 
    <div class="fab-container">

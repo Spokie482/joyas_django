@@ -12,6 +12,7 @@ from .forms import CheckoutForm, UserUpdateForm, PerfilUpdateForm
 from .models import Perfil
 from django.http import JsonResponse
 from .models import Favorito
+from django.contrib import messages
 
 def catalogo(request):
     # 1. Obtenemos todas las joyas de la base de datos
@@ -33,11 +34,10 @@ def catalogo(request):
     return render(request, 'tienda/index.html', {
         'joyas': joyas,
         'ofertas': ofertas,
-        'categoria_actual': categoria_filter # Pasamos esto para usarlo en el título
+        'categoria_actual': categoria_filter 
     })
 
 
-# 👇 ESTA ES LA NUEVA FUNCIÓN
 def detalle(request, producto_id):
     # Busca el producto por su ID o da error 404 si no existe
     joya = get_object_or_404(Producto, pk=producto_id)
@@ -61,7 +61,19 @@ def registro(request):
 def agregar_carrito(request, producto_id):
     carrito = Carrito(request)
     producto = get_object_or_404(Producto, id=producto_id)
-    carrito.agregar(producto)
+    
+    # 1. Obtener cantidad actual en el carrito (si existe)
+    cantidad_en_carrito = 0
+    if str(producto.id) in carrito.carrito:
+        cantidad_en_carrito = carrito.carrito[str(producto.id)]['cantidad']
+        
+    # 2. Verificar si podemos agregar uno más
+    if cantidad_en_carrito + 1 > producto.stock:
+        messages.error(request, f"Lo sentimos, solo quedan {producto.stock} unidades de {producto.nombre}.")
+    else:
+        carrito.agregar(producto)
+        messages.success(request, f"Agregaste {producto.nombre} al carrito.")
+        
     return redirect("ver_carrito")
 
 def eliminar_carrito(request, producto_id):
@@ -124,11 +136,19 @@ def finalizar_compra(request):
             orden = form.save(commit=False)
             orden.usuario = request.user
             orden.total = carrito.obtener_total()
-            orden.save() # Ahora sí la guardamos con usuario y total
+            orden.save()
+            lista_productos = []
+            error_stock = False
 
             # 2. Guardar los detalles (esto es igual que antes)
             for key, item in carrito.carrito.items():
                 producto = get_object_or_404(Producto, id=item["producto_id"])
+
+                if producto.stock < item["cantidad"]:
+                    messages.error(request, f"¡Lo sentimos! El producto {producto.nombre} se acaba de agotar o no hay suficiente stock.")
+                    error_stock = True
+                    break
+
                 DetalleOrden.objects.create(
                     orden=orden,
                     producto=producto,
@@ -139,6 +159,13 @@ def finalizar_compra(request):
                 producto.stock -= item["cantidad"]
                 producto.save()
 
+                lista_productos.append(f"- {item['cantidad']}x {producto.nombre}")
+
+            if error_stock:
+                # Si hubo error, borramos la orden incompleta y volvemos al carrito
+                orden.delete()
+                return redirect('ver_carrito')
+
             # 3. Limpiar y redigir
             carrito.vaciar()
             return render(request, 'tienda/compra_exitosa.html', {'orden': orden})
@@ -147,6 +174,8 @@ def finalizar_compra(request):
         form = CheckoutForm()
 
     return render(request, 'tienda/checkout.html', {'form': form, 'carrito': carrito})
+
+
 def mis_compras(request):
     # Buscamos solo las órdenes de ESTE usuario, ordenadas de la más nueva a la más vieja
     ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha')

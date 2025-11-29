@@ -1,72 +1,123 @@
 {% extends 'tienda/base.html' %}
 
-{% block title %}Acceso Socios{% endblock %}
+{% block title %}Iniciar Sesión{% endblock %}
 
 {% block extra_css %}
 <style>
-    .login-container {
+    .auth-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .glass-login-card {
+        width: 100%;
         max-width: 400px;
-        margin: 80px auto; /* Centrado vertical */
-        padding: 40px;
-        background: #111;
-        border: 1px solid #333;
-        border-top: 3px solid #d4af37; /* Toque dorado */
-        box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 30px;
+        padding: 50px 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.05);
         text-align: center;
+        animation: floatUp 0.8s ease-out;
     }
-    
-    h2 { color: #d4af37; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
-    
-    input { 
-        width: 100%; 
-        padding: 12px; 
-        margin-bottom: 15px;
-        background: #222; 
-        border: 1px solid #444; 
-        color: white; 
+
+    @keyframes floatUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon-header {
+        font-size: 3rem;
+        color: #e1b12c;
+        margin-bottom: 10px;
+    }
+
+    h2 {
+        color: #2c3e50;
+        font-weight: 300;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+    }
+
+    /* Estilos para inputs */
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 12px;
+        color: #2c3e50;
         box-sizing: border-box;
+        transition: 0.3s;
+        font-family: inherit;
+        font-size: 1rem;
     }
-    input:focus { outline: none; border-color: #d4af37; }
-    
-    label { display: none; } /* Ocultamos etiquetas para diseño minimalista */
-    
+    input:focus {
+        outline: none;
+        border-color: #e1b12c;
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(225, 177, 44, 0.1);
+    }
+
     .btn-login {
         width: 100%;
-        padding: 12px;
-        background: #d4af37;
-        color: #000;
+        padding: 15px;
+        background: #2c3e50;
+        color: #fff;
         border: none;
-        font-weight: bold;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1rem;
         cursor: pointer;
         transition: 0.3s;
         margin-top: 10px;
+        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.2);
     }
-    .btn-login:hover { background: #fff; }
-    
-    .register-link {
-        display: block;
-        margin-top: 20px;
-        color: #666;
-        text-decoration: none;
+    .btn-login:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+    }
+
+    .footer-links {
+        margin-top: 30px;
         font-size: 0.9rem;
+        color: #7f8c8d;
     }
-    .register-link:hover { color: #d4af37; }
+    .footer-links a {
+        color: #e1b12c;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .footer-links a:hover { text-decoration: underline; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="login-container">
-    <h2>Acceso Socios</h2>
-    
-    <form method="post">
-        {% csrf_token %}
+<div class="auth-container">
+    <div class="glass-login-card">
+        <div class="icon-header">
+            <i class="ri-user-heart-line"></i>
+        </div>
+        <h2>Bienvenido</h2>
         
-        <input type="text" name="username" placeholder="Usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
-        
-        <button type="submit" class="btn-login">INGRESAR</button>
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            
+            <input type="text" name="username" placeholder="Usuario" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            
+            <button type="submit" class="btn-login">INGRESAR</button>
+        </form>
 
-    <a href="{% url 'registro' %}" class="register-link">¿No tienes cuenta? Regístrate aquí</a>
+        <div class="footer-links">
+            <p>¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a></p>
+        </div>
+    </div>
 </div>
 {% endblock %}

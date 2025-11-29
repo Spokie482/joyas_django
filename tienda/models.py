@@ -33,10 +33,21 @@ class Producto(models.Model):
     
 
 class Orden(models.Model):
+    
+    ESTADOS = [
+        ('PENDIENTE', 'Pendiente de Pago'),
+        ('PAGADO', 'Pagado / En Preparación'),
+        ('ENVIADO', 'Enviado'),
+        ('ENTREGADO', 'Entregado'),
+        ('CANCELADO', 'Cancelado'),
+    ]
+
     # Relacionamos la orden con el usuario (Cliente)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='PENDIENTE')
 
     direccion = models.CharField(max_length=250, default="", verbose_name="Dirección")
     ciudad = models.CharField(max_length=100, default="", verbose_name="Ciudad")
@@ -44,7 +55,7 @@ class Orden(models.Model):
     telefono = models.CharField(max_length=20, default="", verbose_name="Teléfono")
     
     def __str__(self):
-        return f"Orden #{self.id} - {self.usuario.username}"
+        return f"Orden #{self.id} - {self.usuario.username} ({self.get_estado_display()})"
 
 class DetalleOrden(models.Model):
     # Esta tabla conecta la Orden con los Productos
