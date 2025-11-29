@@ -82,11 +82,32 @@ def limpiar_carrito(request):
     return redirect("ver_carrito")
 
 def ver_carrito(request):
-    # Calculamos el total para mostrarlo en el HTML
+    # 1. Obtenemos el carrito y el total actual
     carrito = Carrito(request)
     total = carrito.obtener_total()
-    return render(request, 'tienda/carrito.html', {'total': total})
+    
+    LIMITE_ENVIO_GRATIS = 15000
+    
+    # 2. Matemáticas: Calculamos cuánto falta
+    falta_para_envio = LIMITE_ENVIO_GRATIS - total
+    
+    # 3. Matemáticas: Calculamos el porcentaje para la barra (0% a 100%)
+    if total > 0:
+        porcentaje_barra = (total / LIMITE_ENVIO_GRATIS) * 100
+    else:
+        porcentaje_barra = 0
+    
+    # Nos aseguramos de que la barra no se pase del 100%
+    if porcentaje_barra > 100:
+        porcentaje_barra = 100
 
+    # 4. Enviamos TODO al HTML (total, limite, falta y porcentaje)
+    return render(request, 'tienda/carrito.html', {
+        'total': total,
+        'limite_envio': LIMITE_ENVIO_GRATIS,
+        'falta_envio': round(falta_para_envio, 2), # Redondeamos a 2 decimales
+        'porcentaje_envio': int(porcentaje_barra)
+    })
 
 
 @login_required # <--- Esto obliga a iniciar sesión antes de comprar

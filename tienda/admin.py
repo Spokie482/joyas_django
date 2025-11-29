@@ -1,8 +1,5 @@
-
-
-# Register your models here.
 from django.contrib import admin
-from .models import Producto, Orden, DetalleOrden
+from .models import Producto, Orden, DetalleOrden, Perfil, Favorito
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
@@ -10,11 +7,7 @@ class ProductoAdmin(admin.ModelAdmin):
     search_fields = ('nombre',)
     list_editable = ('en_oferta', 'precio_oferta')
     list_filter = ('categoria', 'en_oferta')
-    
 
-# --- 2. Configuración de ÓRDENES (Lo nuevo) ---
-
-# Esto crea la tabla pequeña dentro de la Orden para ver qué compraron
 class DetalleOrdenInline(admin.TabularInline):
     model = DetalleOrden
     extra = 0
@@ -25,5 +18,15 @@ class DetalleOrdenInline(admin.TabularInline):
 class OrdenAdmin(admin.ModelAdmin):
     list_display = ('id', 'usuario', 'fecha', 'total')
     list_filter = ('fecha',)
-    # Aquí conectamos la tabla de productos con la orden
     inlines = [DetalleOrdenInline]
+
+# --- NUEVOS REGISTROS ---
+@admin.register(Perfil)
+class PerfilAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'telefono', 'ciudad')
+    search_fields = ('usuario__username', 'telefono')
+
+@admin.register(Favorito)
+class FavoritoAdmin(admin.ModelAdmin):
+    list_display = ('usuario', 'producto', 'fecha')
+    list_filter = ('fecha',)

@@ -1,105 +1,187 @@
 {% extends 'tienda/base.html' %}
 
-{% block title %}Confirmar Compra{% endblock %}
+{% block title %}Finalizar Compra{% endblock %}
 
 {% block extra_css %}
 <style>
-    .checkout-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 40px;
-        max-width: 1000px;
+    .checkout-wrapper {
+        max-width: 1100px;
         margin: 40px auto;
-        padding: 20px;
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    /* PANELES DE CRISTAL */
+    .glass-panel-form, .glass-panel-summary {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 25px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    }
+
+    /* COLUMNA IZQUIERDA: FORMULARIO */
+    .col-form {
+        flex: 2;
+        min-width: 320px;
+    }
+
+    h2 {
+        color: #2c3e50;
+        margin-top: 0;
+        margin-bottom: 25px;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        padding-bottom: 15px;
+    }
+
+    /* Estilos de Inputs Modernos */
+    .form-group { margin-bottom: 20px; }
+    
+    label { 
+        display: block; 
+        margin-bottom: 8px; 
+        color: #7f8c8d; 
+        font-size: 0.9rem;
+        font-weight: 600;
     }
     
-    .col-form, .col-resumen {
-        flex: 1;
-        background: #111;
-        padding: 30px;
-        border: 1px solid #333;
-        border-top: 3px solid #d4af37;
-    }
-    
-    h2 { color: #d4af37; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-    
-    /* Estilos del formulario */
-    .form-input {
+    input[type="text"], input[type="email"], select {
         width: 100%;
-        padding: 12px;
-        margin-bottom: 15px;
-        background: #222;
-        border: 1px solid #444;
-        color: white;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 12px;
+        color: #2c3e50;
         box-sizing: border-box;
+        transition: 0.3s;
+        font-family: inherit;
+        font-size: 1rem;
     }
-    .form-input:focus { border-color: #d4af37; outline: none; }
     
-    label { display: block; margin-bottom: 5px; color: #aaa; }
-    
+    input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 4px rgba(225, 177, 44, 0.1);
+        background: #fff;
+    }
+
+    /* Botón de Confirmación */
     .btn-confirm {
         width: 100%;
         padding: 15px;
-        background: #d4af37;
-        color: #000;
-        font-weight: bold;
+        background: #2c3e50;
+        color: #fff;
+        font-weight: 600;
         border: none;
+        border-radius: 50px;
         cursor: pointer;
         font-size: 1.1rem;
-        margin-top: 10px;
+        margin-top: 20px;
         transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.2);
     }
-    .btn-confirm:hover { background: #fff; }
+    .btn-confirm:hover {
+        background: #34495e;
+        transform: translateY(-2px);
+    }
 
-    /* Estilos del resumen */
-    .resumen-item {
+    /* COLUMNA DERECHA: RESUMEN */
+    .col-summary {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .summary-item {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 10px;
-        color: #ddd;
-        border-bottom: 1px solid #222;
-        padding-bottom: 10px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #7f8c8d;
+        font-size: 0.9rem;
     }
+    .summary-item:last-child { border-bottom: none; }
+
+    .item-name { font-weight: 500; color: #2c3e50; }
+
     .total-final {
-        font-size: 1.5rem;
-        color: #d4af37;
+        font-size: 1.8rem;
+        color: var(--accent-color);
         text-align: right;
         margin-top: 20px;
-        font-weight: bold;
+        font-weight: 600;
+    }
+    
+    .secure-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+        color: #27ae60;
+        font-size: 0.9rem;
+        background: rgba(39, 174, 96, 0.1);
+        padding: 10px;
+        border-radius: 10px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="checkout-container">
+<div class="checkout-wrapper">
     
     <div class="col-form">
-        <h2>Datos de Envío</h2>
-        <form method="post">
-            {% csrf_token %}
+        <div class="glass-panel-form">
+            <h2><i class="ri-map-pin-line"></i> Datos de Envío</h2>
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div style="color: #e74c3c; font-size: 0.85rem; margin-top: 5px;">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn-confirm">CONFIRMAR Y PAGAR</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-summary">
+        <div class="glass-panel-summary">
+            <h2>Resumen del Pedido</h2>
             
-            {% for field in form %}
-                <div>
-                    <label>{{ field.label }}</label>
-                    {{ field }}
+            {% for key, item in request.session.carrito.items %}
+                <div class="summary-item">
+                    <div>
+                        <div class="item-name">{{ item.nombre }}</div>
+                        <small>Cant: {{ item.cantidad }}</small>
+                    </div>
+                    <span>${{ item.precio }}</span>
                 </div>
             {% endfor %}
             
-            <button type="submit" class="btn-confirm">CONFIRMAR PEDIDO</button>
-        </form>
-    </div>
-
-    <div class="col-resumen">
-        <h2>Resumen del Pedido</h2>
-        {% for key, item in request.session.carrito.items %}
-            <div class="resumen-item">
-                <span>{{ item.cantidad }}x {{ item.nombre }}</span>
-                <span>${{ item.precio }}</span>
+            <div class="summary-item" style="margin-top: 20px; color: #2c3e50; font-weight: bold;">
+                <span>Total a Pagar</span>
             </div>
-        {% endfor %}
-        
-        <div class="total-final">
-            Total: ${{ carrito.obtener_total }}
+            
+            <div class="total-final">
+                ${{ carrito.obtener_total }}
+            </div>
+
+            <div class="secure-badge">
+                <i class="ri-lock-2-line"></i> Pago 100% Seguro
+            </div>
         </div>
     </div>
 </div>

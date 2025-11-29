@@ -3,201 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Angel Wings | {% block title %}Joyería{% endblock %}</title>
+    <title>Tormenta | {% block title %}Joyería{% endblock %}</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
     <style>
-        /* --- ESTILOS GLOBALES --- */
+        /* --- 1. VARIABLES GLOBALES (PALETA LIQUID) --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Fondo perla */
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --text-main: #2c3e50;
+            --text-secondary: #596275;
+            --accent-color: #e1b12c; /* Dorado suave para acciones */
+            --accent-hover: #efc94c;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #f0f0f0;
-            font-family: 'Georgia', serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            /* Patrón de fondo opcional para dar textura */
+            background-attachment: fixed;
         }
 
-        /* NAVBAR (BARRA DE NAVEGACIÓN) */
+        /* --- 2. NAVBAR GLASSH IBRIDO --- */
         nav {
-            background-color: #111;
-            border-bottom: 1px solid #333;
-            padding: 20px;
+            background: rgba(250, 234, 249, 0.65); /* Casi sólido para legibilidad */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         
         .logo {
-            color: #d4af37; /* Oro */
+            color: var(--text-main);
             font-size: 1.5rem;
             text-decoration: none;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .nav-links a {
-            color: #aaa;
+            color: var(--text-secondary);
             text-decoration: none;
             margin-left: 20px;
             font-size: 0.9rem;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            font-weight: 500;
         }
 
-        .nav-links a:hover { color: #d4af37; }
+        .nav-links a:hover { color: var(--accent-color); transform: translateY(-2px); }
 
-        /* CONTENIDO PRINCIPAL */
-        main {
-            flex: 1; /* Esto empuja el footer hacia abajo */
-            padding: 20px;
+        /* --- 3. UTILIDADES GLASSMORPHISM --- */
+        /* Usa esta clase en contenedores para darles el efecto vidrio */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* FOOTER */
+        main { flex: 1; padding: 20px; }
+
         footer {
             text-align: center;
-            padding: 20px;
-            background-color: #111;
-            color: #444;
+            padding: 30px;
+            background: rgba(255,255,255,0.5);
+            color: var(--text-secondary);
             font-size: 0.8rem;
-            border-top: 1px solid #222;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* Clases utilitarias heredadas */
+        /* --- BOTONES MODERNOS --- */
         .btn-gold {
-            background-color: #d4af37;
-            color: #000;
-            padding: 10px 20px;
+            background: var(--accent-color);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 50px; /* Redondos */
             text-decoration: none;
             display: inline-block;
             transition: 0.3s;
             cursor: pointer;
             border: none;
+            box-shadow: 0 4px 15px rgba(225, 177, 44, 0.3);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
         }
-        .btn-gold:hover { background-color: #fff; }
+        .btn-gold:hover { 
+            background: var(--accent-hover); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(225, 177, 44, 0.4);
+        }
 
-            /* --- BOTÓN FLOTANTE SOCIAL (FAB) --- */
-        .fab-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999; /* Para que siempre esté encima de todo */
+        /* BUSCADOR ESTILO CÁPSULA */
+        .search-container {
             display: flex;
-            flex-direction: column-reverse; /* Para que se desplieguen hacia arriba */
-            align-items: center;
-            gap: 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 50px;
+            padding: 5px;
+            border: 1px solid rgba(0,0,0,0.05);
         }
-
-        /* El botón principal (el que se ve siempre) */
-        .fab-main {
-            width: 60px;
-            height: 60px;
-            background: #d4af37; /* Dorado */
-            color: #000;
-            border-radius: 50%;
+        .search-input {
             border: none;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-            font-size: 1.5rem;
+            background: transparent;
+            padding: 5px 15px;
+            outline: none;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+        .search-btn {
+            background: var(--accent-color);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease;
+            transition: 0.3s;
         }
+        .search-btn:hover { transform: scale(1.1); }
 
-        /* Efecto al pasar el mouse sobre el contenedor */
-        .fab-container:hover .fab-main {
-            transform: rotate(45deg); /* El icono '+' gira */
-            background: #fff;
-        }
-
-        /* Los botones sociales (ocultos al inicio) */
-        .fab-social {
-            width: 45px;
-            height: 45px;
-            background: #111; /* Negro */
-            color: #d4af37;   /* Icono dorado */
-            border: 1px solid #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            
-            /* Animación de entrada */
-            opacity: 0;
-            transform: translateY(20px) scale(0);
-            transition: all 0.3s ease;
-            pointer-events: none; /* No se pueden clicar si están ocultos */
-        }
-
-        .fab-social:hover {
-            background: #d4af37;
-            color: #000;
-        }
-
-        /* Mágica: Al hacer hover en el contenedor, aparecen los iconos */
-        .fab-container:hover .fab-social {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: all;
-        }
-
-        /* Retraso para efecto cascada (uno por uno) */
+        /* FAB FLOTANTE SOCIAL (Ajustado a claro) */
+        .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column-reverse; align-items: center; gap: 15px; }
+        .fab-main { width: 60px; height: 60px; background: var(--accent-color); color: #fff; border-radius: 50%; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15); font-size: 1.5rem; cursor: pointer; transition: transform 0.3s ease; }
+        .fab-container:hover .fab-main { transform: rotate(45deg); }
+        .fab-social { width: 45px; height: 45px; background: #fff; color: var(--text-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); opacity: 0; transform: translateY(20px) scale(0); transition: all 0.3s ease; }
+        .fab-container:hover .fab-social { opacity: 1; transform: translateY(0) scale(1); }
+        .fab-social:hover { color: var(--accent-color); }
         .fab-container:hover .fab-social:nth-child(2) { transition-delay: 0.05s; }
         .fab-container:hover .fab-social:nth-child(3) { transition-delay: 0.1s; }
         .fab-container:hover .fab-social:nth-child(4) { transition-delay: 0.15s; }
 
     </style>
     {% block extra_css %}{% endblock %}
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body>
 
     <nav>
-       <a href="{% url 'catalogo' %}" class="logo">Angel Wings</a>
+       <a href="{% url 'catalogo' %}" class="logo">
+           <span style="font-weight:300;">Angel</span>Wings
+       </a>
         
-        <form action="{% url 'catalogo' %}" method="GET" style="display: flex;">
-            <input type="text" name="q" placeholder="Buscar joya..." 
-                   style="padding: 5px 10px; border-radius: 4px 0 0 4px; border: none; outline: none;">
-            <button type="submit" 
-                    style="padding: 5px 10px; background: #d4af37; border: none; border-radius: 0 4px 4px 0; cursor: pointer;">
-                🔍
-            </button>
+        <form action="{% url 'catalogo' %}" method="GET" class="search-container">
+            <input type="text" name="q" placeholder="Buscar..." class="search-input">
+            <button type="submit" class="search-btn"><i class="ri-search-line"></i></button>
         </form>
 
         <div class="nav-links">
-            <a href="{% url 'catalogo' %}">CATÁLOGO</a>
-            <a href="{% url 'ver_carrito' %}" style="margin-left: 15px; margin-right: 15px;">
-        🛒 <span style="color: #d4af37; font-weight: bold;">
-            {{ request.session.carrito.keys|length }}
-            </span>
-            </a>
+            <a href="{% url 'catalogo' %}">Catálogo</a>
             
             {% if user.is_authenticated %}
-        
-                <a href="{% url 'editar_perfil' %}" style="color: #d4af37; margin-left: 20px; text-decoration: none; font-weight: bold; transition: 0.3s;" title="Editar mi perfil">
-            {% if user.perfil.foto %}
-                <img src="{{ user.perfil.foto.url }}" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle; border: 1px solid #d4af37; object-fit: cover;">
+                <a href="{% url 'ver_carrito' %}">
+                     
+                    <i class="ri-shopping-bag-3-line" style="font-size: 1.4rem; vertical-align: middle;"></i>
+                    {% if request.session.carrito %}
+                        <span style="
+                            position: absolute;
+                            top: -8px;
+                            right: -10px;
+                            background: var(--accent-color);
+                            color: white;
+                            width: 18px;
+                            height: 18px;
+                            border-radius: 50%;
+                            font-size: 0.7rem;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: bold;
+                        ">
+                        {{ request.session.carrito.keys|length }}
+                        </span>
+                    {% endif %}
+
+                    <span style="background: var(--accent-color); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem;">{{ request.session.carrito.keys|length }}</span>
+                
+                </a>
+                <a href="{% url 'editar_perfil' %}">Perfil</a>
+
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; margin-left:10px; font-family: inherit; font-size: 0.9rem;">Salir</button>
+                </form>
             {% else %}
-                👤
+                <a href="{% url 'login' %}">Ingresar</a>
+                <a href="{% url 'registro' %}" class="btn-gold" style="color: #fff; padding: 8px 20px;">Registro</a>
             {% endif %}
-            {{ user.username }}
-        </a>
-
-        <a href="{% url 'mis_compras' %}" style="margin-left: 15px; font-size: 0.9rem;">Mis Pedidos</a>
-        <a href="{% url 'mis_favoritos' %}" style="margin-left: 15px; font-size: 0.9rem;">Favoritos ❤️</a>
-
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" style="background:none; border:none; color:#666; cursor:pointer; margin-left:10px; font-size:0.9rem;">(Salir)</button>
-        </form>
-
-    {% else %}
-        <a href="{% url 'login' %}">INGRESAR</a>
-        <a href="{% url 'registro' %}" class="btn-gold" style="padding: 5px 15px; font-size: 0.8rem;">REGISTRO</a>
-    {% endif %}
         </div>
     </nav>
 
@@ -207,25 +221,14 @@
     </main>
 
     <footer>
-        &copy; 2025 Tormenta Jewelry. Exclusividad garantizada.
+        &copy; 2025 Tormenta Jewelry. Estilo y pureza.
     </footer>
 
    <div class="fab-container">
-    <button class="fab-main">
-        <i class="ri-add-line"></i>
-    </button>
-
-    <a href="https://wa.me/5491112345678" target="_blank" class="fab-social" title="WhatsApp">
-        <i class="ri-whatsapp-line"></i>
-    </a>
-    
-    <a href="https://instagram.com/tu_tienda" target="_blank" class="fab-social" title="Instagram">
-        <i class="ri-instagram-line"></i>
-    </a>
-    
-    <a href="https://facebook.com/tu_tienda" target="_blank" class="fab-social" title="Facebook">
-        <i class="ri-facebook-fill"></i>
-    </a>
+    <button class="fab-main"><i class="ri-add-line"></i></button>
+    <a href="#" class="fab-social"><i class="ri-whatsapp-line"></i></a>
+    <a href="#" class="fab-social"><i class="ri-instagram-line"></i></a>
+    <a href="#" class="fab-social"><i class="ri-facebook-fill"></i></a>
 </div>
 
 </body>
