@@ -38,6 +38,8 @@ class Cupon(models.Model):
     valido_hasta = models.DateTimeField()
     activo = models.BooleanField(default=True)
 
+    usuarios_usados = models.ManyToManyField(User, blank=True, related_name='cupones_usados')
+
     def __str__(self):
         return f"{self.codigo} - {self.descuento}% OFF"
 

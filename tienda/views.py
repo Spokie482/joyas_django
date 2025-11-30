@@ -271,9 +271,13 @@ def finalizar_compra(request):
                 producto.save()
                 lista_productos.append(f"- {item['cantidad']}x {producto.nombre}")
 
-            # Enviar correo (código anterior)...
-            # (Pega aquí tu bloque de envío de correo si ya lo tenías configurado)
-
+            if 'cupon_id' in request.session:
+                try:
+                    cupon_usado = Cupon.objects.get(id=request.session['cupon_id'])
+                    cupon_usado.usuarios_usados.add(request.user) # Agregamos al usuario a la lista negra de este cupón
+                except Cupon.DoesNotExist:
+                    pass
+            
             carrito.vaciar()
             # Limpiamos el cupón de la sesión al terminar
             if 'cupon_id' in request.session:
@@ -358,16 +362,21 @@ def aplicar_cupon(request):
     if request.method == 'POST':
         codigo = request.POST.get('codigo_cupon')
         try:
-            # Buscamos un cupón que coincida, esté activo y en fecha válida
             cupon = Cupon.objects.get(
                 codigo__iexact=codigo,
                 activo=True,
                 valido_desde__lte=timezone.now(),
                 valido_hasta__gte=timezone.now()
             )
-            # Guardamos el ID del cupón en la "memoria" del navegador (sesión)
-            request.session['cupon_id'] = cupon.id
-            messages.success(request, f"¡Cupón {cupon.codigo} aplicado con éxito!")
+            
+            
+            if request.user.is_authenticated and request.user in cupon.usuarios_usados.all():
+                messages.error(request, f"Ya has utilizado el cupón {cupon.codigo} anteriormente.")
+                request.session['cupon_id'] = None
+            else:
+                request.session['cupon_id'] = cupon.id
+                messages.success(request, f"¡Cupón {cupon.codigo} aplicado con éxito!")
+                
         except Cupon.DoesNotExist:
             request.session['cupon_id'] = None
             messages.error(request, "Este cupón no es válido o ha expirado.")

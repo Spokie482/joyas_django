@@ -34,6 +34,22 @@ class FavoritoAdmin(admin.ModelAdmin):
 
 @admin.register(Cupon)
 class CuponAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'descuento', 'activo', 'valido_hasta')
+    list_display = ('codigo', 'descuento', 'activo', 'valido_hasta', 'usuarios_que_lo_usaron')
     list_filter = ('activo', 'valido_hasta')
     search_fields = ('codigo',)
+    
+    filter_horizontal = ('usuarios_usados',) 
+
+    # Muestra un contador en la lista principal
+    def usuarios_que_lo_usaron(self, obj):
+        return obj.usuarios_usados.count()
+    usuarios_que_lo_usaron.short_description = "Veces Usado"
+
+    # 2. ACCIÓN RÁPIDA (Botón Reset)
+    actions = ['resetear_historial']
+
+    @admin.action(description="🔄 Resetear usuarios (Permitir usar de nuevo)")
+    def resetear_historial(self, request, queryset):
+        for cupon in queryset:
+            cupon.usuarios_usados.clear() # Borra todas las relaciones
+        self.message_user(request, "¡Historial de usuarios borrado! Ahora pueden volver a usar estos cupones.")

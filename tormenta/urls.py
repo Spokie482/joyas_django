@@ -4,6 +4,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from tienda import views
+from django.contrib.sitemaps.views import sitemap
+from tienda.sitemaps import ProductoSitemap, StaticViewSitemap
+from django.views.generic.base import TemplateView
+
+#diccionario de mapas
+sitemaps = {
+    'productos': ProductoSitemap,
+    'estaticas': StaticViewSitemap,
+}
+
+
+
 
 # Definimos las rutas UNA sola vez
 urlpatterns = [
@@ -34,6 +46,9 @@ urlpatterns = [
     path('dashboard/', views.dashboard_admin, name='dashboard_admin'),
 
     path('busqueda-ajax/', views.buscar_productos_ajax, name='buscar_productos_ajax'),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
 
 ]
 
