@@ -49,7 +49,7 @@
     
     .user-badge {
         display: inline-block;
-        background: #e1b12c;
+        background: #2c3e50;
         color: #fff;
         padding: 5px 15px;
         border-radius: 20px;
@@ -116,7 +116,7 @@
         transition: 0.3s;
         font-family: inherit;
     }
-    input:focus { outline: none; border-color: #e1b12c; box-shadow: 0 0 0 4px rgba(225, 177, 44, 0.1); }
+    input:focus { outline: none; border-color: #2c3e50; box-shadow: 0 0 0 4px rgba(225, 177, 44, 0.1); }
 
     .btn-save {
         background: #2c3e50;
@@ -169,7 +169,7 @@
             {% csrf_token %}
             
             <div style="margin-bottom: 30px;">
-                <h3 style="color: #e1b12c; font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Cuenta</h3>
+                <h3 style="color: #2c3e50; font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Cuenta</h3>
                 {% for field in u_form %}
                     <div class="form-group">
                         <label>{{ field.label }}</label>
@@ -179,7 +179,7 @@
             </div>
 
             <div>
-                <h3 style="color: #e1b12c; font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Envío & Detalles</h3>
+                <h3 style="color: #2c3e50; font-size: 1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Envío & Detalles</h3>
                 {% for field in p_form %}
                     <div class="form-group">
                         <label>{{ field.label }}</label>

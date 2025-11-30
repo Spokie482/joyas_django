@@ -419,3 +419,20 @@ def dashboard_admin(request):
         'labels_top': json.dumps(labels_top),
         'data_top': json.dumps(data_top),
     })
+
+def buscar_productos_ajax(request):
+    query = request.GET.get('q', '')
+    resultados = []
+    
+    if len(query) > 2: # Solo buscar si escribe más de 2 letras
+        productos = Producto.objects.filter(nombre__icontains=query)[:5] # Máx 5 resultados
+        for p in productos:
+            resultados.append({
+                'id': p.id,
+                'nombre': p.nombre,
+                'precio': str(p.precio),
+                'imagen': p.imagen.url if p.imagen else '',
+                'url': f"/producto/{p.id}/" # La url para ir al detalle
+            })
+    
+    return JsonResponse({'resultados': resultados})

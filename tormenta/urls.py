@@ -33,6 +33,8 @@ urlpatterns = [
 
     path('dashboard/', views.dashboard_admin, name='dashboard_admin'),
 
+    path('busqueda-ajax/', views.buscar_productos_ajax, name='buscar_productos_ajax'),
+
 ]
 
 

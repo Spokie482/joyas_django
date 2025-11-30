@@ -21,14 +21,14 @@
     <style>
         /* --- 1. VARIABLES GLOBALES (PALETA LIQUID) --- */
         :root {
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --bg-gradient: linear-gradient(135deg, #c4e3fdff 0%, #c2e2fdff 100%);
             --glass-bg: rgba(255, 255, 255, 0.25);
             --glass-border: 1px solid rgba(255, 255, 255, 0.4);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
             --text-main: #2c3e50;
             --text-secondary: #596275;
-            --accent-color: #e1b12c;
-            --accent-hover: #efc94c;
+            --accent-color: #2c3e50;
+            --accent-hover: #2c3e50;
         }
 
         body {
@@ -46,7 +46,7 @@
 
         /* --- 2. NAVBAR GLASSH IBRIDO --- */
         nav {
-            background: rgba(250, 234, 249, 0.65);
+            background: rgba(179, 221, 255, 0.2);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.05);
@@ -68,6 +68,10 @@
             text-transform: uppercase;
             font-weight: 600;
             z-index: 1001; /* Asegura que el logo siempre se pueda tocar */
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: -1px;
         }
 
         .nav-links {
@@ -256,10 +260,26 @@
            <span style="font-weight:300;">Angel</span>Wings
        </a>
        
-        <form action="{% url 'catalogo' %}" method="GET" class="search-container">
-            <input type="text" name="q" placeholder="Buscar..." class="search-input">
-            <button type="submit" class="search-btn"><i class="ri-search-line"></i></button>
-        </form>
+        <div style="position: relative;">
+            <form action="{% url 'catalogo' %}" method="GET" class="search-container">
+                <input type="text" name="q" id="searchInput" placeholder="Buscar..." class="search-input" autocomplete="off">
+                <button type="submit" class="search-btn"><i class="ri-search-line"></i></button>
+            </form>
+            
+            <div id="searchResults" class="glass-panel" style="
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                min-width: 250px;
+                margin-top: 10px;
+                padding: 10px;
+                z-index: 2000;
+                background: rgba(255, 255, 255, 0.95);
+            ">
+                </div>
+        </div>
 
         <button class="menu-toggle" onclick="toggleMenu()">
             <i class="ri-menu-4-line"></i>
@@ -385,6 +405,67 @@
            const nav = document.getElementById('navLinks');
            nav.classList.toggle('active');
        }
+   </script>
+
+   <script>
+       // Lógica del Buscador Autocomplete
+       const searchInput = document.getElementById('searchInput');
+       const resultsBox = document.getElementById('searchResults');
+
+       searchInput.addEventListener('keyup', function() {
+           const query = this.value;
+           
+           if (query.length > 2) {
+               fetch(`/busqueda-ajax/?q=${query}`)
+                   .then(response => response.json())
+                   .then(data => {
+                       const resultados = data.resultados;
+                       resultsBox.innerHTML = ''; // Limpiar anteriores
+
+                       if (resultados.length > 0) {
+                           resultsBox.style.display = 'block';
+                           
+                           resultados.forEach(prod => {
+                               // Crear elemento visual para cada producto
+                               const item = document.createElement('a');
+                               item.href = prod.url;
+                               item.style.textDecoration = 'none';
+                               item.style.display = 'flex';
+                               item.style.alignItems = 'center';
+                               item.style.padding = '10px';
+                               item.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+                               item.style.color = 'var(--text-main)';
+                               
+                               // HTML interno del item
+                               item.innerHTML = `
+                                   <img src="${prod.imagen}" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                                   <div>
+                                       <div style="font-size: 0.9rem; font-weight: 600;">${prod.nombre}</div>
+                                       <div style="font-size: 0.8rem; color: var(--accent-color);">$${prod.precio}</div>
+                                   </div>
+                               `;
+                               
+                               // Efecto Hover simple
+                               item.onmouseover = () => item.style.background = 'rgba(0,0,0,0.03)';
+                               item.onmouseout = () => item.style.background = 'transparent';
+
+                               resultsBox.appendChild(item);
+                           });
+                       } else {
+                           resultsBox.style.display = 'none';
+                       }
+                   });
+           } else {
+               resultsBox.style.display = 'none';
+           }
+       });
+
+       // Cerrar resultados si haces clic fuera
+       document.addEventListener('click', function(e) {
+           if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+               resultsBox.style.display = 'none';
+           }
+       });
    </script>
 
 </body>
