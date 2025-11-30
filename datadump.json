@@ -1,0 +1,1328 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2025-11-27T23:28:39.199Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Dije giratorio - $5000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2025-11-27T23:29:00.781Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "anillo dorado - $3000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2025-11-27T23:30:04.328Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2025-11-28T01:40:51.991Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "Orden #1 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2025-11-28T01:40:57.842Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "Orden #2 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2025-11-28T02:40:59.361Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Dije giratorio - $5000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2025-11-28T02:41:19.441Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2025-11-28T02:41:26.852Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "anillo dorado - $3000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2025-11-28T02:42:40.704Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "Orden #1 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2025-11-28T02:42:47.222Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "Orden #2 - josefa",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-11-28T02:43:01.226Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "4",
+    "object_repr": "Orden #4 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2025-11-28T02:43:01.226Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "3",
+    "object_repr": "Orden #3 - josefa",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2025-11-28T03:25:14.578Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Categoria\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2025-11-28T03:25:49.227Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "dije dorado - $3000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2025-11-28T03:26:09.988Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "anillo de acero - $10000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2025-11-28T03:26:38.131Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "pulsera de oro - $10000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2025-11-28T03:27:02.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "pulseras combo - $5000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2025-11-28T13:50:40.663Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "5",
+    "object_repr": "Orden #5 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2025-11-28T16:00:37.911Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "6",
+    "object_repr": "Orden #6 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2025-11-29T04:49:19.316Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "7",
+    "object_repr": "Orden #7 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2025-11-29T05:20:13.150Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "pulseras combo - $5000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Imagen\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2025-11-29T05:20:28.872Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "pulsera de oro - $10000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Imagen\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2025-11-29T06:18:30.989Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "8",
+    "object_repr": "Orden #8 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2025-11-29T06:34:11.203Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "10",
+    "object_repr": "Orden #10 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2025-11-29T06:34:11.203Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "9",
+    "object_repr": "Orden #9 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2025-11-29T06:46:51.444Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "11",
+    "object_repr": "Orden #11 - angel",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2025-11-29T06:47:06.950Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Dije giratorio - $5000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2025-11-29T07:00:22.531Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Stock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2025-11-29T07:00:37.237Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "3",
+    "object_repr": "josefa",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2025-11-29T07:00:37.237Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "user1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2025-11-29T07:49:22.530Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "4",
+    "object_repr": "Chinchurreta",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"password\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2025-11-29T08:34:49.719Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "12",
+    "object_repr": "Orden #12 - angel (Pagado / En Preparación)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2025-11-29T08:35:02.412Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "12",
+    "object_repr": "Orden #12 - angel (Enviado)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2025-11-29T08:35:13.007Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "12",
+    "object_repr": "Orden #12 - angel (Entregado)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2025-11-29T08:35:19.492Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "12",
+    "object_repr": "Orden #12 - angel (Cancelado)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2025-11-29T09:26:26.255Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "VERANO2025 - 10% OFF",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2025-11-29T09:26:59.618Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "VERANO2025 - 10% OFF",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Valido desde\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2025-11-29T09:27:44.515Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "VERANO2025 - 10% OFF",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Valido hasta\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2025-11-29T09:28:29.387Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "VERANO2025 - 50% OFF",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Descuento\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2025-11-29T09:29:06.766Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "13",
+    "object_repr": "Orden #13 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2025-11-29T09:29:11.665Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "12",
+    "object_repr": "Orden #12 - angel (Cancelado)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2025-11-29T09:53:13.548Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "14",
+    "object_repr": "Orden #14 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2025-11-29T10:45:58.629Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "16",
+    "object_repr": "Orden #16 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2025-11-29T10:45:58.629Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "15",
+    "object_repr": "Orden #15 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2025-11-29T20:33:43.576Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "17",
+    "object_repr": "Orden #17 - angel (Pagado / En Preparación)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2025-11-29T20:34:00.503Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "17",
+    "object_repr": "Orden #17 - angel (Cancelado)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Estado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2025-11-29T20:34:14.106Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "17",
+    "object_repr": "Orden #17 - angel (Cancelado)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2025-11-29T20:36:04.895Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "anillo de acero - $10000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2025-11-29T20:36:04.897Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "dije dorado - $3000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2025-11-29T20:36:04.898Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2025-11-29T20:36:18.548Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "anillo dorado - $3000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2025-11-29T20:36:47.070Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "anillo dorado - $3000.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "7",
+    "object_repr": "pulseras combo - $5000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "6",
+    "object_repr": "pulsera de oro - $10000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "5",
+    "object_repr": "anillo de acero - $10000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "4",
+    "object_repr": "dije dorado - $3000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "3",
+    "object_repr": "pulsera de plata - $1000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "2",
+    "object_repr": "anillo dorado - $3000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2025-11-29T22:22:16.395Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "Dije giratorio - $5000.00",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2025-11-29T22:24:03.409Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "8",
+    "object_repr": "Anillos Giratorios - $7500",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2025-11-29T22:29:16.861Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "conjunto collar daga + corazón - $9500",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2025-11-29T22:30:11.610Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "10",
+    "object_repr": "conjunto collar daga + corazón - $9500",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2025-11-29T22:31:56.364Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "11",
+    "object_repr": "combo cadena + pulsera - $7500",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2025-11-29T22:32:11.596Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "11",
+    "object_repr": "combo cadena + pulsera - $7500.00",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2025-11-29T22:35:48.703Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "12",
+    "object_repr": "combo marino pulsera + pasantes(2) - $15900",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2025-11-29T22:36:51.670Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "13",
+    "object_repr": "conjunto collar daga + corazón - $9500",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2025-11-29T22:38:53.627Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "14",
+    "object_repr": "conjunto con dige giratorio - $8000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2025-11-29T22:40:46.006Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "15",
+    "object_repr": "collar con dige de luna - $4000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 69,
+  "fields": {
+    "action_time": "2025-11-29T22:42:12.717Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "16",
+    "object_repr": "collar con dige de cereza - $4000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 70,
+  "fields": {
+    "action_time": "2025-11-29T22:43:31.719Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "17",
+    "object_repr": "collar con dige giratorio - $8000",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 71,
+  "fields": {
+    "action_time": "2025-11-29T22:44:17.884Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "conjunto collar daga + corazón - $9500.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u00bfEst\\u00e1 en Oferta?\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 72,
+  "fields": {
+    "action_time": "2025-11-29T22:45:02.950Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "9",
+    "object_repr": "conjunto collar daga + corazón - $9500.00",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Precio Rebajado\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 73,
+  "fields": {
+    "action_time": "2025-11-29T22:45:34.258Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "18",
+    "object_repr": "Orden #18 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 74,
+  "fields": {
+    "action_time": "2025-11-29T22:45:42.742Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "VERANO2025 - 50% OFF",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 75,
+  "fields": {
+    "action_time": "2025-11-30T01:53:25.343Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "BIENVENIDO - 50% OFF",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 76,
+  "fields": {
+    "action_time": "2025-11-30T01:54:33.567Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "BIENVENIDO - 50% OFF",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 77,
+  "fields": {
+    "action_time": "2025-11-30T01:59:41.995Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "BIENVENIDO - 50% OFF",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 78,
+  "fields": {
+    "action_time": "2025-11-30T02:00:13.024Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "BIENVENIDO - 50% OFF",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 79,
+  "fields": {
+    "action_time": "2025-11-30T02:02:08.569Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "20",
+    "object_repr": "Orden #20 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 80,
+  "fields": {
+    "action_time": "2025-11-30T02:02:08.569Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "19",
+    "object_repr": "Orden #19 - angel (Pendiente de Pago)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 81,
+  "fields": {
+    "action_time": "2025-11-30T02:03:04.724Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "1",
+    "object_repr": "example.com",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 82,
+  "fields": {
+    "action_time": "2025-11-30T02:03:41.078Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "2",
+    "object_repr": "AngelWings",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 83,
+  "fields": {
+    "action_time": "2025-11-30T02:04:38.431Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "2",
+    "object_repr": "AngelWings.com",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Domain name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 84,
+  "fields": {
+    "action_time": "2025-11-30T02:05:17.641Z",
+    "user": 1,
+    "content_type": 14,
+    "object_id": "2",
+    "object_repr": "127.0.0.1:8000",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Domain name\"]}}]"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$UJrDiaJEXphsNqi5yAy2LJ$c66Ff+orpRGvGn+HEyo6t16d/IbKHoiybBHDGF8FygU=",
+    "last_login": "2025-11-30T01:38:22.885Z",
+    "is_superuser": true,
+    "username": "angel",
+    "first_name": "josefo",
+    "last_name": "joselin",
+    "email": "fabriziopachame3@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-27T22:44:00.981Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$bHM1CS16YqkyeE3NYZacj4$fbatmCqk2CT3+wIWal25fXSXmx0zT6sGDD8Bd3X2WaU=",
+    "last_login": "2025-11-29T20:40:45.408Z",
+    "is_superuser": false,
+    "username": "Chinchurreta",
+    "first_name": "chinchurreta",
+    "last_name": "alegre",
+    "email": "chinchu@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-29T07:45:50.084Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "76s3w16qaptrx5slubuulg2pvkmz7rjr",
+  "fields": {
+    "session_data": ".eJxVjDEOgzAQBP_iOrI4TIydMn3egNZ3diCJsGSgQvw9IFEk7c7srKrDMvfdMsXSDaJuitTldwvgdxwPIC-Mz6w5j3MZgj4UfdJJP7LEz_10_wI9pn5_V947XA1JqIjI1sICXxs4OMfcoGpryzY1zllBmxBJvLE-JINEAdijjFKGOavbum1f0RQ87g:1vPWjG:7xXDTwkvPbCr47EoB9qCAOHGKHl0Gr_rOGhxJoJHNaA",
+    "expire_date": "2025-12-14T01:59:58.596Z"
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 8,
+  "fields": {
+    "nombre": "Anillos Giratorios",
+    "precio": "7500.00",
+    "categoria": "AN",
+    "descripcion": "Anillos giratorios de acero quirurjicos",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.03.jpeg",
+    "stock": 4,
+    "en_oferta": false,
+    "precio_oferta": null
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 9,
+  "fields": {
+    "nombre": "conjunto collar daga + corazón",
+    "precio": "9500.00",
+    "categoria": "CO",
+    "descripcion": "acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.04.jpeg",
+    "stock": 1,
+    "en_oferta": false,
+    "precio_oferta": null
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 10,
+  "fields": {
+    "nombre": "conjunto collar daga + corazón",
+    "precio": "9500.00",
+    "categoria": "AN",
+    "descripcion": "collares de acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.05.jpeg",
+    "stock": 1,
+    "en_oferta": true,
+    "precio_oferta": "8500.00"
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 11,
+  "fields": {
+    "nombre": "combo cadena + pulsera",
+    "precio": "7500.00",
+    "categoria": "CO",
+    "descripcion": "combo de acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.07_1.jpeg",
+    "stock": 1,
+    "en_oferta": false,
+    "precio_oferta": null
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 12,
+  "fields": {
+    "nombre": "combo marino pulsera + pasantes(2)",
+    "precio": "15900.00",
+    "categoria": "PU",
+    "descripcion": "combo de acero blanco",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.07_2.jpeg",
+    "stock": 1,
+    "en_oferta": false,
+    "precio_oferta": null
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 13,
+  "fields": {
+    "nombre": "conjunto collar daga + corazón",
+    "precio": "9500.00",
+    "categoria": "AN",
+    "descripcion": "conjunto de acero quirúrgico",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.07.jpeg",
+    "stock": 0,
+    "en_oferta": true,
+    "precio_oferta": "8500.00"
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 14,
+  "fields": {
+    "nombre": "conjunto con dige giratorio",
+    "precio": "8000.00",
+    "categoria": "CO",
+    "descripcion": "acero blanco",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.10.jpeg",
+    "stock": 1,
+    "en_oferta": true,
+    "precio_oferta": "7850.00"
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 15,
+  "fields": {
+    "nombre": "collar con dige de luna",
+    "precio": "4000.00",
+    "categoria": "CO",
+    "descripcion": "acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.11.jpeg",
+    "stock": 0,
+    "en_oferta": false,
+    "precio_oferta": null
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 16,
+  "fields": {
+    "nombre": "collar con dige de cereza",
+    "precio": "4000.00",
+    "categoria": "CO",
+    "descripcion": "conjunto de acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.12.jpeg",
+    "stock": 0,
+    "en_oferta": true,
+    "precio_oferta": "3800.00"
+  }
+},
+{
+  "model": "tienda.producto",
+  "pk": 17,
+  "fields": {
+    "nombre": "collar con dige giratorio",
+    "precio": "8000.00",
+    "categoria": "AN",
+    "descripcion": "acero dorado",
+    "imagen": "joyas/WhatsApp_Image_2025-11-29_at_19.15.14.jpeg",
+    "stock": 0,
+    "en_oferta": true,
+    "precio_oferta": "7850.00"
+  }
+},
+{
+  "model": "tienda.perfil",
+  "pk": 1,
+  "fields": {
+    "usuario": 1,
+    "telefono": "08888 8000 9000",
+    "direccion": "calle 900 entre 8 y 100",
+    "ciudad": "choroti",
+    "codigo_postal": "4590",
+    "foto": "perfiles/perfil-foto.jpg"
+  }
+},
+{
+  "model": "tienda.perfil",
+  "pk": 2,
+  "fields": {
+    "usuario": 4,
+    "telefono": "1111111",
+    "direccion": "32 entre 3 y 10",
+    "ciudad": "choroti",
+    "codigo_postal": "4000",
+    "foto": "perfiles/perfil-foto_UwP2Uij.jpg"
+  }
+},
+{
+  "model": "tienda.favorito",
+  "pk": 14,
+  "fields": {
+    "usuario": 1,
+    "producto": 12,
+    "fecha": "2025-11-29T23:32:24.725Z"
+  }
+},
+{
+  "model": "tienda.favorito",
+  "pk": 15,
+  "fields": {
+    "usuario": 1,
+    "producto": 10,
+    "fecha": "2025-11-29T23:32:27.848Z"
+  }
+},
+{
+  "model": "sites.site",
+  "pk": 2,
+  "fields": {
+    "domain": "127.0.0.1:8000",
+    "name": "Angel WIngs Local"
+  }
+}
+]

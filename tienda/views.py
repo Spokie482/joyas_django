@@ -119,12 +119,30 @@ def detalle(request, producto_id):
         'promedio_stars': round(promedio_stars or 0, 1) # <--- Nuevo: Promedio redondeado
     })
 
+@login_required
+def eliminar_review(request, review_id):
+    # Buscamos la reseña o damos error 404 si no existe
+    review = get_object_or_404(Review, id=review_id)
+    
+    # Solo permitimos borrar si el usuario es el dueño O es Staff (Admin)
+    if request.user == review.usuario or request.user.is_staff:
+        review.delete()
+        messages.success(request, "Comentario eliminado correctamente.")
+    else:
+        messages.error(request, "No tienes permiso para eliminar este comentario.")
+    
+    # Redirigimos de vuelta a la página del producto
+    return redirect('detalle', producto_id=review.producto.id)
+
 def registro(request):
     if request.method == 'POST':
         # Si llenaron el formulario y le dieron a "Enviar"
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+
             # Iniciar sesión automáticamente después de registrarse
             login(request, user)
             return redirect('catalogo')

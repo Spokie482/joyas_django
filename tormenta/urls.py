@@ -19,7 +19,7 @@ sitemaps = {
 
 # Definimos las rutas UNA sola vez
 urlpatterns = [
-    path('admin/', admin.site.urls),  # <--- Acceso al panel
+    path('observciones_mari/', admin.site.urls),  # <--- Acceso al panel
     
     path('accounts/login/', auth_views.LoginView.as_view(template_name='tienda/login.html'), name='login'),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -49,6 +49,7 @@ urlpatterns = [
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path("robots.txt", TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
+    path('review/eliminar/<int:review_id>/', views.eliminar_review, name='eliminar_review'),
 
 ]
 

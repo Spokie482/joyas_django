@@ -160,6 +160,21 @@
         <a href="{% url 'mis_compras' %}" class="btn-favorites-access" style="color: #2c3e50;">
             <i class="ri-shopping-bag-3-line"></i> Mis Pedidos
         </a>
+
+        {% if user.is_staff %}
+            <div style="margin-top: 20px; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 20px;">
+                
+                <a href="{% url 'dashboard_admin' %}" class="btn-favorites-access" style="color: #e1b12c; border: 1px solid #e1b12c; background: rgba(225, 177, 44, 0.05); margin-bottom: 10px;">
+                    <i class="ri-bar-chart-grouped-line"></i> Ver Estadísticas
+                </a>
+
+                <a href="{% url 'admin:index' %}" target="_blank" class="btn-favorites-access" style="color: #2c3e50; border: 1px solid #2c3e50; background: rgba(44, 62, 80, 0.05);">
+                    <i class="ri-database-2-line"></i> Administrar BD
+                </a>
+
+            </div>
+        {% endif %}
+
     </div>
 
     <div class="form-section">

@@ -333,19 +333,32 @@
                     <div style="max-height: 500px; overflow-y: auto; padding-right: 10px;">
                         {% for review in reviews %}
                         <div class="review-item">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <div style="font-weight: 600; color: #2c3e50;">
-                                    {{ review.usuario.username }}
-                                    <span style="color: #e1b12c; margin-left: 8px; font-size: 0.9rem;">
-                                        {% if review.calificacion == 5 %}★★★★★
-                                        {% elif review.calificacion == 4 %}★★★★☆
-                                        {% elif review.calificacion == 3 %}★★★☆☆
-                                        {% elif review.calificacion == 2 %}★★☆☆☆
-                                        {% else %}★☆☆☆☆{% endif %}
-                                    </span>
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            
+                                <div>
+                                    <div style="font-weight: 600; color: #2c3e50;">
+                                        {{ review.usuario.first_name|default:review.usuario.username }}
+                                        <span style="color: #e1b12c; margin-left: 8px; font-size: 0.9rem;">
+                                            {% if review.calificacion == 5 %}★★★★★
+                                            {% elif review.calificacion == 4 %}★★★★☆
+                                            {% elif review.calificacion == 3 %}★★★☆☆
+                                            {% elif review.calificacion == 2 %}★★☆☆☆
+                                            {% else %}★☆☆☆☆{% endif %}
+                                        </span>
+                                    </div>
+                                    <span style="font-size: 0.8rem; color: #bdc3c7;">{{ review.fecha|date:"d M Y" }}</span>
                                 </div>
-                                <span style="font-size: 0.8rem; color: #bdc3c7;">{{ review.fecha|date:"d M Y" }}</span>
-                            </div>
+
+                                {% if request.user == review.usuario or request.user.is_staff %}
+                                    <a href="{% url 'eliminar_review' review.id %}" 
+                                    onclick="return confirm('¿Estás seguro de que quieres eliminar esta opinión?');"
+                                    style="color: #e74c3c; text-decoration: none; opacity: 0.6; transition: 0.3s;"
+                                    title="Eliminar comentario">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </a>
+                                {% endif %}
+
+                        </div>
                             <p style="color: #7f8c8d; line-height: 1.5; margin: 0; font-size: 0.95rem;">
                                 "{{ review.comentario }}"
                             </p>

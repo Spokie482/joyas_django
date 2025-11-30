@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os  # <--- Agregar esto
+import os 
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,16 +47,19 @@ INSTALLED_APPS = [
     'tienda',
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    'axes',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'tormenta.urls'
@@ -83,11 +86,22 @@ WSGI_APPLICATION = 'tormenta.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'Angel_Wings_db',
+       'USER': 'postgres',       
+       'PASSWORD': 'Mar1@nela',
+       'HOST': 'localhost',
+       'PORT': '5432',
+   }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -131,10 +145,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-import os
-
-# ... resto del código ...
-
 # Configuración de Archivos Multimedia (Fotos)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -142,3 +152,47 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SITE_ID = 2
+
+# Cierra la sesión si el usuario cierra el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Impide que Javascript pueda leer las cookies de sesión
+SESSION_COOKIE_HTTPONLY = False
+CSRF_COOKIE_HTTPONLY = False
+# Esta lógica detecta si DEBUG es False (Producción) para activar el modo estricto
+if not DEBUG:
+    # Solo enviar cookies si la conexión es segura (HTTPS)
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    
+    # Obligar a los navegadores a usar HTTPS por un tiempo largo (HSTS)
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000 # 1 año
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    
+    # Evita que el navegador adivine tipos de contenido (Sniffing)
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# 'DENY': Bloquea que tu sitio se cargue en cualquier iframe (Más seguro).
+# 'SAMEORIGIN': Permite iframes solo si vienen de tu mismo dominio.
+X_FRAME_OPTIONS = 'DENY'
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.jsdelivr.net")
+CSP_SCRIPT_SRC = ("'self'", "cdn.jsdelivr.net")
+CSP_IMG_SRC = ("'self'", "data:", "images.unsplash.com")
+CSP_FONT_SRC = ("'self'", "fonts.gstatic.com", "cdn.jsdelivr.net")
+
+# Reemplazar con dominio real cuando haga deploy
+CSRF_TRUSTED_ORIGINS = ['https://tormentajoyas.onrender.com']
+
+AXES_FAILURE_LIMIT = 2
+AXES_COOLOFF_TIME = 1 # Horas de bloqueo
+
+AUTHENTICATION_BACKENDS = [
+    # 1. El sistema por defecto de Django (para que el login normal siga funcionando)
+    'django.contrib.auth.backends.ModelBackend',
+
+    # 2. El sistema de Axes (para vigilar los intentos fallidos)
+    'axes.backends.AxesStandaloneBackend',
+]
