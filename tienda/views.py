@@ -15,6 +15,7 @@ from django.db.models import Count, Sum, Avg, Q
 import json
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
+from django.db import transaction
 
 def catalogo(request):
     # Traemos TODOS los productos disponibles
@@ -306,55 +307,77 @@ def finalizar_compra(request):
     
     # 4. TOTAL FINAL REAL
     total_a_pagar = total_con_descuento + costo_envio
-    # ---------------------------------------
 
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            orden = form.save(commit=False)
-            orden.usuario = request.user
-            # Guardamos el total CORRECTO (con envío y descuento)
-            orden.total = total_a_pagar 
-            orden.save()
+            try:
+                with transaction.atomic():
+                    # 1. Guardar Orden
+                    orden = form.save(commit=False)
+                    orden.usuario = request.user
+                    orden.total = total_a_pagar
+                    orden.save()
 
-            # Guardar detalles
-            lista_productos = []
-            for key, item in carrito.carrito.items():
-                producto = get_object_or_404(Producto, id=item["producto_id"])
-                variante_id = item.get("variante_id")
-                variante_obj = None
+                    # 2. Procesar Items y Stock (con bloqueo)
+                    for key, item in carrito.carrito.items():
+                        producto = Producto.objects.select_for_update().get(id=item["producto_id"])
+                        variante_id = item.get("variante_id")
+                        variante_obj = None
+                        cantidad = int(item["cantidad"])
 
-                if variante_id:
-                    variante_obj = Variante.objects.get(id=variante_id)
-                
-                DetalleOrden.objects.create(
-                    orden=orden,
-                    producto=producto,
-                    variante=variante_obj,
-                    cantidad=item["cantidad"],
-                    precio_unitario=float(item["precio"])
-                )
-                if variante_obj:
-                    variante_obj.stock -= item["cantidad"]
-                    variante_obj.save()
-                else:
-                    producto.stock -= item["cantidad"]
-                    producto.save()
+                        if variante_id:
+                            variante_obj = Variante.objects.select_for_update().get(id=variante_id)
+                            stock_actual = variante_obj.stock
+                            nombre_ref = f"{producto.nombre} ({variante_obj.nombre})"
+                        else:
+                            stock_actual = producto.stock
+                            nombre_ref = producto.nombre
 
-                # esta linea tal vez de problemas
-                # 
-                #     
-                lista_productos.append(f"- {item['cantidad']}x {producto.nombre}")
+                        # Validación de Stock
+                        if stock_actual < cantidad:
+                            raise ValueError(f"Lo sentimos, ya no hay suficiente stock de {nombre_ref}.")
 
-            if 'cupon_id' in request.session:
-                try:
-                    cupon_usado = Cupon.objects.get(id=request.session['cupon_id'])
-                    cupon_usado.usuarios_usados.add(request.user) # Agregamos al usuario a la lista negra de este cupón
-                except Cupon.DoesNotExist:
-                    pass
+                        # Crear detalle
+                        DetalleOrden.objects.create(
+                            orden=orden,
+                            producto=producto,
+                            variante=variante_obj,
+                            cantidad=cantidad,
+                            precio_unitario=float(item["precio"])
+                        )
+
+                        # Restar stock
+                        if variante_obj:
+                            variante_obj.stock -= cantidad
+                            variante_obj.save()
+                        else:
+                            producto.stock -= cantidad
+                            producto.save()
+
+                    if 'cupon_id' in request.session:
+                        try:
+                            # Bloqueamos el cupón también por seguridad
+                            cupon_usado = Cupon.objects.select_for_update().get(id=request.session['cupon_id'])
+                            
+                            # Agregamos al usuario a la lista de "ya usados"
+                            cupon_usado.usuarios_usados.add(request.user) 
+                        except Cupon.DoesNotExist:
+                            pass
+
+            except ValueError as e:
+                messages.error(request, str(e))
+                return redirect('ver_carrito')
             
+            except Exception as e:
+                messages.error(request, "Error inesperado al procesar la compra.")
+                return redirect('ver_carrito')
+
+            # --- ÉXITO ---
+            # Solo vaciamos si todo salió bien
             carrito.vaciar()
-            # Limpiamos el cupón de la sesión al terminar
+            
+            # Limpiamos el cupón de la sesión
             if 'cupon_id' in request.session:
                 del request.session['cupon_id']
                 
