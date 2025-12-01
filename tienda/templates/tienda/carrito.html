@@ -219,9 +219,12 @@
                     </div>
 
                     <div class="qty-control">
-                        <a href="{% url 'restar_carrito' item.producto_id %}" class="btn-qty">-</a>
+                        <a href="{% url 'restar_carrito' item.producto_id %}{% if item.variante_id %}?variante={{ item.variante_id }}{% endif %}" class="btn-qty">-</a>
+                        
                         <span class="qty-number">{{ item.cantidad }}</span>
-                        <a href="{% url 'agregar_carrito' item.producto_id %}" class="btn-qty">+</a>
+                        
+                        <a href="{% url 'agregar_carrito' item.producto_id %}{% if item.variante_id %}?variante={{ item.variante_id }}{% endif %}" class="btn-qty">+</a>
+
                     </div>
 
                     <div class="item-price">

@@ -20,7 +20,7 @@ class ProductoAdmin(admin.ModelAdmin):
 class DetalleOrdenInline(admin.TabularInline):
     model = DetalleOrden
     extra = 0
-    readonly_fields = ('producto', 'cantidad', 'precio_unitario')
+    readonly_fields = ('producto', 'variante', 'cantidad', 'precio_unitario') 
     can_delete = False
 
 @admin.register(Orden)

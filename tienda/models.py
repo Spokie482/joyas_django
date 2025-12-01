@@ -85,9 +85,12 @@ class DetalleOrden(models.Model):
     orden = models.ForeignKey(Orden, related_name='items', on_delete=models.CASCADE)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField(default=1)
+    variante = models.ForeignKey('Variante', on_delete=models.SET_NULL, null=True, blank=True)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
-    
+
     def __str__(self):
+        if self.variante:
+            return f"{self.cantidad} x {self.producto.nombre} ({self.variante.nombre})"
         return f"{self.cantidad} x {self.producto.nombre}"
     
 class Perfil(models.Model):

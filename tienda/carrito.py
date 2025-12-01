@@ -65,18 +65,26 @@ class Carrito:
         self.session["carrito"] = self.carrito
         self.session.modified = True
 
-    def eliminar(self, producto):
-        producto_id = str(producto.id)
-        if producto_id in self.carrito:
-            del self.carrito[producto_id]
-            self.guardar() # Actualiza el reloj al eliminar también
+    def eliminar(self, producto, variante=None):
+        if variante:
+            cart_id = f"{producto.id}_{variante.id}"
+        else:
+            cart_id = str(producto.id)
 
-    def restar(self, producto):
-        producto_id = str(producto.id)
-        if producto_id in self.carrito:
-            self.carrito[producto_id]["cantidad"] -= 1
-            if self.carrito[producto_id]["cantidad"] < 1:
-                self.eliminar(producto)
+        if cart_id in self.carrito:
+            del self.carrito[cart_id]
+            self.guardar()
+
+    def restar(self, producto, variante=None):
+        if variante:
+            cart_id = f"{producto.id}_{variante.id}"
+        else:
+            cart_id = str(producto.id)
+
+        if cart_id in self.carrito:
+            self.carrito[cart_id]["cantidad"] -= 1
+            if self.carrito[cart_id]["cantidad"] < 1:
+                self.eliminar(producto, variante)
             else:
                 self.guardar()
 

@@ -163,7 +163,7 @@ def agregar_carrito(request, producto_id):
     carrito = Carrito(request)
     producto = get_object_or_404(Producto, id=producto_id)
 
-    variante_id = request.POST.get('variante')
+    variante_id = request.POST.get('variante') or request.GET.get('variante')
     variante_obj = None
     
     if variante_id:
@@ -190,16 +190,24 @@ def agregar_carrito(request, producto_id):
     
     return redirect("ver_carrito")
 
-def eliminar_carrito(request, producto_id):
-    carrito = Carrito(request)
-    producto = get_object_or_404(Producto, id=producto_id)
-    carrito.eliminar(producto)
-    return redirect("ver_carrito")
-
 def restar_carrito(request, producto_id):
     carrito = Carrito(request)
     producto = get_object_or_404(Producto, id=producto_id)
-    carrito.restar(producto)
+    
+    variante_id = request.GET.get('variante')
+    variante_obj = get_object_or_404(Variante, id=variante_id) if variante_id else None
+    
+    carrito.restar(producto, variante=variante_obj)
+    return redirect("ver_carrito")
+
+def eliminar_carrito(request, producto_id):
+    carrito = Carrito(request)
+    producto = get_object_or_404(Producto, id=producto_id)
+    
+    variante_id = request.GET.get('variante')
+    variante_obj = get_object_or_404(Variante, id=variante_id) if variante_id else None
+    
+    carrito.eliminar(producto, variante=variante_obj)
     return redirect("ver_carrito")
 
 def limpiar_carrito(request):
@@ -272,7 +280,6 @@ def finalizar_compra(request):
     if not carrito.carrito:
         return redirect('catalogo')
 
-    # --- LÓGICA MATEMÁTICA CENTRALIZADA ---
     # 1. Subtotal
     subtotal = carrito.obtener_total()
     
@@ -314,14 +321,29 @@ def finalizar_compra(request):
             lista_productos = []
             for key, item in carrito.carrito.items():
                 producto = get_object_or_404(Producto, id=item["producto_id"])
+                variante_id = item.get("variante_id")
+                variante_obj = None
+
+                if variante_id:
+                    variante_obj = Variante.objects.get(id=variante_id)
+                
                 DetalleOrden.objects.create(
                     orden=orden,
                     producto=producto,
+                    variante=variante_obj,
                     cantidad=item["cantidad"],
                     precio_unitario=float(item["precio"])
                 )
-                producto.stock -= item["cantidad"]
-                producto.save()
+                if variante_obj:
+                    variante_obj.stock -= item["cantidad"]
+                    variante_obj.save()
+                else:
+                    producto.stock -= item["cantidad"]
+                    producto.save()
+
+                # esta linea tal vez de problemas
+                # 
+                #     
                 lista_productos.append(f"- {item['cantidad']}x {producto.nombre}")
 
             if 'cupon_id' in request.session:
