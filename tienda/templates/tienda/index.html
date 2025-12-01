@@ -338,10 +338,13 @@
     <div id="catalogo-start" class="catalogo-section">
         
         <div class="category-bar">
-            <a href="{% url 'catalogo' %}#catalogo-start" class="cat-btn {% if not categoria_actual %}active{% endif %}">Todas</a>
-            <a href="?categoria=AN#catalogo-start" class="cat-btn {% if categoria_actual == 'AN' %}active{% endif %}">Anillos</a>
-            <a href="?categoria=CO#catalogo-start" class="cat-btn {% if categoria_actual == 'CO' %}active{% endif %}">Collares</a>
-            <a href="?categoria=PU#catalogo-start" class="cat-btn {% if categoria_actual == 'PU' %}active{% endif %}">Pulseras</a>
+            <a href="{% url 'catalogo' %}" class="cat-btn {% if not categoria_actual %}active{% endif %}">Todas</a>
+            
+            {% for cat in categorias %}
+                <a href="?categoria={{ cat.slug }}" class="cat-btn {% if categoria_actual == cat.slug %}active{% endif %}">
+                    {{ cat.nombre }}
+                </a>
+            {% endfor %}
         </div>
 
         <button class="btn-open-filters" onclick="toggleFilters()">

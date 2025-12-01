@@ -273,15 +273,29 @@
             <p class="desc">{{ joya.descripcion }}</p>
             
             <div class="actions">
-                {% if joya.stock > 0 %}
-                    <a href="{% url 'agregar_carrito' joya.id %}" class="btn-add-cart">
-                        AGREGAR A LA BOLSA <i class="ri-shopping-bag-3-line" style="margin-left: 10px;"></i>
-                    </a>
-                {% else %}
-                    <button class="btn-add-cart" style="background: #bdc3c7; cursor: not-allowed; box-shadow: none;">
-                        AGOTADO
-                    </button>
-                {% endif %}
+                <form action="{% url 'agregar_carrito' joya.id %}" method="POST">
+                    {% csrf_token %}
+                    
+                    {% if joya.variantes.exists %}
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: 600; color: var(--text-main); display: block; margin-bottom: 5px;">Opciones:</label>
+                        <select name="variante" required style="width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.1); background: rgba(255,255,255,0.5);">
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            {% for v in joya.variantes.all %}
+                                <option value="{{ v.id }}" {% if v.stock == 0 %}disabled{% endif %}>
+                                    {{ v.nombre }} {% if v.stock == 0 %}(Agotado){% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
+
+                    <div class="actions">
+                        <button type="submit" class="btn-add-cart" style="border:none; cursor:pointer; width:100%; font-family: inherit;">
+                            AGREGAR A LA BOLSA <i class="ri-shopping-bag-3-line"></i>
+                        </button>
+                    </div>
+                </form>
 
                 <button class="btn-fav-detail {% if user.is_authenticated and joya in user.favoritos.all %}active{% endif %}" onclick="toggleFavoritoDetail({{ joya.id }}, this)">
                     {% if user.is_authenticated and joya in user.favoritos.all %} 

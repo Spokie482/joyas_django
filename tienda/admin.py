@@ -1,12 +1,21 @@
 from django.contrib import admin
-from .models import Producto, Orden, DetalleOrden, Perfil, Favorito, Cupon
+from .models import Producto, Orden, DetalleOrden, Perfil, Favorito, Cupon, Review, Categoria, Variante
+
+@admin.register(Categoria)
+class CategoriaAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'slug')
+    prepopulated_fields = {'slug': ('nombre',)}
+
+class VarianteInline(admin.TabularInline):
+    model = Variante
+    extra = 1
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'categoria', 'precio', 'precio_oferta', 'en_oferta', 'stock')
-    search_fields = ('nombre',)
-    list_editable = ('en_oferta', 'precio_oferta')
+    list_display = ('nombre', 'categoria', 'precio', 'stock', 'en_oferta')
     list_filter = ('categoria', 'en_oferta')
+    search_fields = ('nombre',)
+    inlines = [VarianteInline]
 
 class DetalleOrdenInline(admin.TabularInline):
     model = DetalleOrden

@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.shortcuts import render, get_object_or_404, redirect
 from .carrito import Carrito
 from django.contrib.auth.decorators import login_required
-from .models import Orden, DetalleOrden, Cupon, Favorito, Perfil, Review, Producto
+from .models import Orden, DetalleOrden, Cupon, Favorito, Perfil, Review, Producto, Categoria, Variante
 from .forms import CheckoutForm, UserUpdateForm, PerfilUpdateForm, ReviewForm
 from django.http import JsonResponse
 from django.contrib import messages
@@ -17,8 +17,9 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
 def catalogo(request):
-    # 1. Base: Traemos TODOS los productos disponibles
+    # Traemos TODOS los productos disponibles
     productos = Producto.objects.all()
+    categorias = Categoria.objects.all()
     
     # --- FILTROS GLOBALES (Funcionan para Joyas, Ropa y Maquillaje) ---
     
@@ -33,7 +34,7 @@ def catalogo(request):
     # B. Filtro por Categoría
     categoria_filter = request.GET.get('categoria')
     if categoria_filter:
-        productos = productos.filter(categoria=categoria_filter)
+        productos = productos.filter(categoria__slug=categoria_filter)
 
     # C. Filtro por Rango de Precio (Nuevo)
     min_price = request.GET.get('min_price')
@@ -43,6 +44,10 @@ def catalogo(request):
         productos = productos.filter(precio__gte=min_price)
     if max_price:
         productos = productos.filter(precio__lte=max_price)
+
+    categoria_slug = request.GET.get('categoria')
+    if categoria_slug:
+        productos = productos.filter(categoria__slug=categoria_slug)
 
     # D. Ordenamiento (Nuevo)
     # opciones: 'reciente', 'precio_asc', 'precio_desc'
@@ -63,7 +68,8 @@ def catalogo(request):
     return render(request, 'tienda/index.html', {
         'joyas': productos, # Usamos la misma variable para no romper el HTML
         'ofertas': ofertas,
-        'categoria_actual': categoria_filter,
+        'categorias': categorias,
+        'categoria_actual': categoria_slug,
     })
 
 def detalle(request, producto_id):
@@ -156,6 +162,18 @@ def registro(request):
 def agregar_carrito(request, producto_id):
     carrito = Carrito(request)
     producto = get_object_or_404(Producto, id=producto_id)
+
+    variante_id = request.POST.get('variante')
+    variante_obj = None
+    
+    if variante_id:
+        variante_obj = get_object_or_404(Variante, id=variante_id)
+
+        if variante_obj.stock < 1:
+             messages.error(request, f"La opción {variante_obj.nombre} está agotada.")
+             return redirect("ver_carrito")
+    
+    
     
     # 1. Obtener cantidad actual en el carrito (si existe)
     cantidad_en_carrito = 0
@@ -166,9 +184,10 @@ def agregar_carrito(request, producto_id):
     if cantidad_en_carrito + 1 > producto.stock:
         messages.error(request, f"Lo sentimos, solo quedan {producto.stock} unidades de {producto.nombre}.")
     else:
-        carrito.agregar(producto)
+        carrito.agregar(producto, variante=variante_obj)
         messages.success(request, f"Agregaste {producto.nombre} al carrito.")
-        
+       
+    
     return redirect("ver_carrito")
 
 def eliminar_carrito(request, producto_id):

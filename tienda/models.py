@@ -6,30 +6,42 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-class Producto(models.Model):
-    CATEGORIAS = [
-        ('AN', 'Anillo'),
-        ('CO', 'Collar'),
-        ('PU', 'Pulsera'),
-        ('AR', 'Aretes'),
-    ]
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, help_text="Identificador para la URL (ej: anillos-oro)")
 
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = "Categoría"
+        verbose_name_plural = "Categorías"
+
+class Producto(models.Model):
     nombre = models.CharField(max_length=200)
-    precio = models.DecimalField(max_digits=10, decimal_places=2) # Ejemplo: 1500.50
-    categoria = models.CharField(max_length=2, choices=CATEGORIAS, default='AN')
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True, related_name='productos')
+    
     descripcion = models.TextField(blank=True)
-    imagen = models.ImageField(upload_to='joyas/', null=True, blank=True) # <--- ¡Nuevo!
+    imagen = models.ImageField(upload_to='joyas/', null=True, blank=True)
+    
+    # El stock global se mantiene, pero la variante tendrá prioridad si existe
     stock = models.IntegerField(default=1)
 
-    
     en_oferta = models.BooleanField(default=False, verbose_name="¿Está en Oferta?")
     precio_oferta = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Precio Rebajado")
-    
-    
-    
-    
+
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
+    
+class Variante(models.Model):
+    producto = models.ForeignKey(Producto, related_name='variantes', on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50, help_text="Ej: Talla S, Rojo, 15ml")
+    stock = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.producto.nombre} - {self.nombre}"
     
 class Cupon(models.Model):
     codigo = models.CharField(max_length=50, unique=True, help_text="Ej: VERANO2025")

@@ -28,25 +28,36 @@ class Carrito:
             
         self.carrito = carrito
 
-    def agregar(self, producto):
-        # ... (Mantén tu lógica de agregar existente aquí) ...
+    def agregar(self, producto, variante=None):
+        # 1. Definir precio base
         if producto.en_oferta and producto.precio_oferta:
             precio_final = producto.precio_oferta
         else:
             precio_final = producto.precio
         
-        if str(producto.id) not in self.carrito:
-            self.carrito[str(producto.id)] = {
+        # 2. Definir ID única y Nombre
+        if variante:
+            cart_id = f"{producto.id}_{variante.id}" # ID única para la variante
+            nombre_mostrar = f"{producto.nombre} ({variante.nombre})"
+            # Si la variante tuviera precio distinto, se cambiaría aquí
+        else:
+            cart_id = str(producto.id) # ID normal para producto simple
+            nombre_mostrar = producto.nombre
+
+        # 3. Agregar o Incrementar (Lógica Unificada)
+        if cart_id not in self.carrito:
+            self.carrito[cart_id] = {
                 "producto_id": producto.id,
-                "nombre": producto.nombre,
+                "variante_id": variante.id if variante else None,
+                "nombre": nombre_mostrar,
                 "precio": str(precio_final),
                 "cantidad": 1,
                 "imagen": producto.imagen.url if producto.imagen else ""
             }
         else:
-            self.carrito[str(producto.id)]["cantidad"] += 1
+            self.carrito[cart_id]["cantidad"] += 1
         
-        self.guardar() # Esto actualiza el reloj
+        self.guardar()
 
     def guardar(self):
         # Actualizamos la marca de tiempo al momento actual

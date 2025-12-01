@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'tormenta.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'Angel_Wings_db',
+       'NAME': 'angel_wings_db',
        'USER': 'postgres',       
        'PASSWORD': 'Mar1@nela',
        'HOST': 'localhost',
