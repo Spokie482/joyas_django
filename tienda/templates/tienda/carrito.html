@@ -182,6 +182,11 @@
             {% if request.session.carrito %}
                 
                 <h1>Estas a un paso de terminar la compra!!!</h1>
+
+                <div id="timer-box" style="display: none; background: rgba(231, 76, 60, 0.1); color: #c0392b; padding: 10px; border-radius: 10px; margin-bottom: 20px; text-align: center; border: 1px solid rgba(231, 76, 60, 0.3);">
+                    <i class="ri-timer-flash-line"></i> Tu carrito expirará en: 
+                    <span id="countdown" style="font-weight: bold; font-size: 1.1rem;">--:--:--</span>
+                </div>
                 
                 {% widthratio total 15000 100 as porcentaje %}
                 <div style="margin-bottom: 30px;">
@@ -314,4 +319,37 @@
     {% endif %}
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtenemos los segundos desde Django (Backend)
+        let timeLeft = {{ segundos_restantes|default:0 }};
+        
+        const timerBox = document.getElementById('timer-box');
+        const display = document.getElementById('countdown');
+        
+        if (timeLeft > 0) {
+            timerBox.style.display = 'block';
+            
+            const interval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    display.innerHTML = "00:00:00";
+                    // Recargar para que el backend vacíe el carrito
+                    window.location.reload(); 
+                } else {
+                    timeLeft--;
+                    
+                    const h = Math.floor(timeLeft / 3600);
+                    const m = Math.floor((timeLeft % 3600) / 60);
+                    const s = Math.floor(timeLeft % 60);
+                    
+                    // Formato HH:MM:SS
+                    display.textContent = 
+                        `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                }
+            }, 1000);
+        }
+    });
+</script>
 {% endblock %}

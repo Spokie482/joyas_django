@@ -14,6 +14,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum, Avg, Q
 import json
 from django.contrib.auth.models import User
+from datetime import datetime, timedelta
 
 def catalogo(request):
     # 1. Base: Traemos TODOS los productos disponibles
@@ -221,13 +222,28 @@ def ver_carrito(request):
     if porcentaje_barra > 100:
         porcentaje_barra = 100
 
+    segundos_restantes = 0
+    ultimo_acceso = request.session.get("carrito_ultimo_acceso")
+    
+    if carrito.carrito and ultimo_acceso:
+        try:
+            ahora = datetime.now()
+            tiempo_ultimo = datetime.fromisoformat(ultimo_acceso)
+            # Expiración en 2 horas
+            expiracion = tiempo_ultimo + timedelta(hours=2)
+            diferencia = expiracion - ahora
+            segundos_restantes = max(0, diferencia.total_seconds())
+        except ValueError:
+            pass
+
     
     return render(request, 'tienda/carrito.html', {
         'total': total,
         'total_final': total_final,
         'limite_envio': LIMITE_ENVIO_GRATIS,
         'falta_envio': round(falta_para_envio, 2), 
-        'porcentaje_envio': int(porcentaje_barra)
+        'porcentaje_envio': int(porcentaje_barra),
+        'segundos_restantes': int(segundos_restantes),
     })
 
 

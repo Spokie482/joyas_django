@@ -184,6 +184,52 @@
         box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
     }
 
+    .zoom-trigger {
+        display: block;
+        position: relative;
+        cursor: zoom-in; /* Cambia el cursor a una lupa */
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .product-img-main {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .zoom-trigger:hover .product-img-main {
+        transform: scale(1.02); /* Efecto sutil al pasar el mouse */
+    }
+
+    /* Icono de lupa flotante */
+    .zoom-icon {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--text-main);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        opacity: 0;
+        transition: 0.3s;
+        pointer-events: none; /* Para que el clic pase a la imagen */
+    }
+
+    /* Mostrar icono al pasar el mouse o tocar */
+    .zoom-trigger:hover .zoom-icon {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+
 </style>
 {% endblock %}
 
@@ -196,7 +242,13 @@
             {% endif %}
             
             {% if joya.imagen %}
-                <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}">
+                <a data-fslightbox="gallery" href="{{ joya.imagen.url }}" class="zoom-trigger">
+                    <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="product-img-main">
+                    
+                    <div class="zoom-icon">
+                        <i class="ri-zoom-in-line"></i>
+                    </div>
+                </a>
             {% else %}
                 <div style="color: #bdc3c7; font-size: 1.2rem;">Sin Imagen Disponible</div>
             {% endif %}
@@ -486,5 +538,7 @@
         .related-price { color: #2c3e50; font-weight: bold; }
     </style>
     {% endif %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.js"></script>
 
 {% endblock %}
