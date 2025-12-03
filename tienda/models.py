@@ -27,7 +27,7 @@ class Producto(models.Model):
     imagen = models.ImageField(upload_to='joyas/', null=True, blank=True)
     
     # El stock global se mantiene, pero la variante tendrá prioridad si existe
-    stock = models.IntegerField(default=1)
+    stock = models.IntegerField(default=1, db_index=True)
 
     en_oferta = models.BooleanField(default=False, verbose_name="¿Está en Oferta?")
     precio_oferta = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Precio Rebajado")
@@ -67,7 +67,7 @@ class Orden(models.Model):
 
     # Relacionamos la orden con el usuario (Cliente)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=True, db_index=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
     estado = models.CharField(max_length=20, choices=ESTADOS, default='PENDIENTE')
@@ -136,7 +136,7 @@ class Review(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     comentario = models.TextField(verbose_name="Tu opinión")
     calificacion = models.IntegerField(choices=[(i, i) for i in range(1, 6)], verbose_name="Estrellas")
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=True, db_index=True)
 
     def __str__(self):
         return f"{self.usuario.username} - {self.producto.nombre} ({self.calificacion}★)"

@@ -15,6 +15,7 @@ import json
 from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 from django.db import transaction
+from django.core.cache import cache
 
 def catalogo(request):
     productos = Producto.objects.all()
@@ -458,39 +459,58 @@ def aplicar_cupon(request):
 
 @staff_member_required
 def dashboard_admin(request):
-    total_usuarios = User.objects.count()
-    total_ordenes = Orden.objects.count()
-    ingresos_totales = Orden.objects.aggregate(Sum('total'))['total__sum'] or 0
-    low_stock_count = Producto.objects.filter(stock__lte=3).count()
+    # Intentar obtener datos del cache
+    cache_key = 'dashboard_stats'
+    stats = cache.get(cache_key)
 
-    promedio_calidad = Review.objects.aggregate(Avg('calificacion'))['calificacion__avg'] or 0
+    if not stats:
+        total_usuarios = User.objects.count()
+        total_ordenes = Orden.objects.count()
+        ingresos_totales = Orden.objects.aggregate(Sum('total'))['total__sum'] or 0
+        low_stock_count = Producto.objects.filter(stock__lte=3).count()
 
-    ultimas_reviews = Review.objects.order_by('-fecha')[:3]
+        promedio_calidad = Review.objects.aggregate(Avg('calificacion'))['calificacion__avg'] or 0
 
-    ordenes_por_estado = Orden.objects.values('estado').annotate(cantidad=Count('id'))
-    labels_estados = [x['estado'] for x in ordenes_por_estado]
-    data_estados = [x['cantidad'] for x in ordenes_por_estado]
+        ordenes_por_estado = Orden.objects.values('estado').annotate(cantidad=Count('id'))
+        labels_estados = [x['estado'] for x in ordenes_por_estado]
+        data_estados = [x['cantidad'] for x in ordenes_por_estado]
 
-    top_productos = DetalleOrden.objects.values('producto__nombre').annotate(
-        total_vendido=Sum('cantidad')
-    ).order_by('-total_vendido')[:5]
-    labels_top = [x['producto__nombre'] for x in top_productos]
-    data_top = [x['total_vendido'] for x in top_productos]
+        top_productos = DetalleOrden.objects.values('producto__nombre').annotate(
+            total_vendido=Sum('cantidad')
+        ).order_by('-total_vendido')[:5]
+        labels_top = [x['producto__nombre'] for x in top_productos]
+        data_top = [x['total_vendido'] for x in top_productos]
+        
+        stats = {
+            'total_usuarios': total_usuarios,
+            'total_ordenes': total_ordenes,
+            'ingresos_totales': ingresos_totales,
+            'low_stock_count': low_stock_count,
+            'promedio_calidad': promedio_calidad,
+            'labels_estados': labels_estados,
+            'data_estados': data_estados,
+            'labels_top': labels_top,
+            'data_top': data_top,
+        }
+        # Cache por 15 minutos
+        cache.set(cache_key, stats, 60 * 15)
 
-    ordenes_recientes = Orden.objects.order_by('-fecha')[:5]
+    # Optimización N+1: Usar select_related para traer relaciones en una sola query
+    ultimas_reviews = Review.objects.select_related('usuario', 'producto').order_by('-fecha')[:3]
+    ordenes_recientes = Orden.objects.select_related('usuario').order_by('-fecha')[:5]
 
     return render(request, 'tienda/dashboard.html', {
-        'total_usuarios': total_usuarios,
-        'total_ordenes': total_ordenes,
-        'ingresos_totales': ingresos_totales,
-        'low_stock_count': low_stock_count,
+        'total_usuarios': stats['total_usuarios'],
+        'total_ordenes': stats['total_ordenes'],
+        'ingresos_totales': stats['ingresos_totales'],
+        'low_stock_count': stats['low_stock_count'],
         'ordenes_recientes': ordenes_recientes,
-        'promedio_calidad': round(promedio_calidad, 1),
+        'promedio_calidad': round(stats['promedio_calidad'], 1),
         'ultimas_reviews': ultimas_reviews,
-        'labels_estados': json.dumps(labels_estados),
-        'data_estados': json.dumps(data_estados),
-        'labels_top': json.dumps(labels_top),
-        'data_top': json.dumps(data_top),
+        'labels_estados': json.dumps(stats['labels_estados']),
+        'data_estados': json.dumps(stats['data_estados']),
+        'labels_top': json.dumps(stats['labels_top']),
+        'data_top': json.dumps(stats['data_top']),
     })
 
 def buscar_productos_ajax(request):
