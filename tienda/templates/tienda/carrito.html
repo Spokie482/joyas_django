@@ -216,6 +216,44 @@
         pointer-events: none;
         /* Evita clics */
     }
+
+    @media (max-width: 600px) {
+    .cart-item {
+        flex-direction: row; /* Mantener fila pero ajustar */
+        flex-wrap: wrap; /* Permitir que los elementos bajen si no caben */
+        position: relative;
+        padding-bottom: 40px; /* Espacio para el botón eliminar */
+    }
+
+    .item-img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .item-details {
+        width: calc(100% - 90px); /* El resto del ancho menos la imagen */
+    }
+
+    .qty-control {
+        margin-top: 10px;
+    }
+
+    .item-price {
+        position: absolute;
+        bottom: 15px;
+        right: 0;
+        font-size: 1.2rem;
+    }
+
+    /* Mover el botón de eliminar a una esquina accesible */
+    .btn-delete {
+        position: absolute;
+        top: 20px;
+        right: 0;
+        margin: 0;
+        color: #e74c3c;
+    }
+}
 </style>
 {% endblock %}
 

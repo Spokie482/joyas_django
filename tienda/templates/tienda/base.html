@@ -41,7 +41,8 @@
             flex-direction: column;
             min-height: 100vh;
             background-attachment: fixed;
-            overflow-x: hidden; /* Evita desplazamiento lateral en móvil */
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* --- 2. NAVBAR GLASSH IBRIDO --- */
@@ -116,7 +117,7 @@
                 position: fixed;
                 top: 0;
                 right: -100%; /* Escondido a la derecha */
-                width: 75%;
+                width: 80%;
                 height: 100vh;
                 background: rgba(255, 255, 255, 0.95);
                 backdrop-filter: blur(20px);
@@ -126,6 +127,7 @@
                 transition: 0.4s ease;
                 box-shadow: -10px 0 30px rgba(0,0,0,0.1);
                 padding: 20px;
+                padding-top: 60px;
             }
 
             /* Clase que activa JS para mostrar el menú */
@@ -133,9 +135,11 @@
 
             .nav-links a {
                 margin-left: 0;
-                font-size: 1.2rem; /* Letra más grande para dedos */
+                font-size: 1.3rem; /* Letra más grande para dedos */
                 width: 100%;
                 justify-content: center;
+                padding: 15px 0;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
             }
             
             /* Ajuste para el footer en móvil */
@@ -239,6 +243,14 @@
             display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
         .search-btn:hover { transform: scale(1.1); }
+
+        @media (max-width: 768px) {
+            .glass-panel, nav, .hero-glass-card, .detail-glass-card, .glass-card {
+                /* Reducir el blur en móviles para mejorar rendimiento */
+                backdrop-filter: blur(10px) !important; 
+                -webkit-backdrop-filter: blur(10px) !important;
+            }
+        }
 
         .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column-reverse; align-items: center; gap: 15px; }
         .fab-main { width: 60px; height: 60px; background: var(--accent-color); color: #fff; border-radius: 50%; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15); font-size: 1.5rem; cursor: pointer; transition: transform 0.3s ease; }

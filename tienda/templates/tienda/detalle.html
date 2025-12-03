@@ -230,6 +230,37 @@
         transform: translateY(-5px);
     }
 
+    @media (max-width: 768px) {
+    .detail-glass-card {
+        margin: 20px auto; /* Menos margen externo */
+        border-radius: 20px;
+    }
+
+    .img-section, .info-section {
+        min-width: 100%; /* Ocupar el 100% del ancho disponible */
+        padding: 20px; /* Menos padding */
+        flex: 1 1 100%;
+    }
+
+    .img-section img {
+        max-height: 350px; /* Limitar altura para que no ocupe toda la pantalla */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Título más pequeño */
+    }
+
+    /* Botones de acción fijos en la parte inferior (Sticky) - Opcional pero recomendado para E-commerce */
+    .actions {
+        flex-direction: column; /* Botones uno debajo del otro o ajustar tamaño */
+        gap: 10px;
+    }
+    
+    .btn-add-cart {
+        padding: 15px; /* Botón bien grande */
+    }
+    }
+
 </style>
 {% endblock %}
 
