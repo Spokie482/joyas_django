@@ -169,6 +169,24 @@
         transition: width 1s ease;
     }
 
+    .item-disabled {
+        opacity: 0.6;
+        background: rgba(231, 76, 60, 0.05); /* Fondo rojo muy suave para destacar el error */
+    }
+    .stock-warning {
+        color: #c0392b;
+        font-size: 0.8rem;
+        font-weight: bold;
+        display: block;
+        margin-top: 5px;
+    }
+    .btn-checkout.disabled {
+        background: #95a5a6;
+        cursor: not-allowed;
+        box-shadow: none;
+        pointer-events: none; /* Evita clics */
+    }
+
 </style>
 {% endblock %}
 
@@ -206,7 +224,7 @@
                 </div>
 
                 {% for key, item in request.session.carrito.items %}
-                <div class="cart-item">
+                <div class="cart-item {% if not item.tiene_stock %}item-disabled{% endif %}">
                     {% if item.imagen %}
                         <img src="{{ item.imagen }}" class="item-img">
                     {% else %}
@@ -216,6 +234,13 @@
                     <div class="item-details">
                         <div class="item-name">{{ item.nombre }}</div>
                         <div class="item-cat">Ref: {{ item.producto_id }}</div>
+                        
+                        {% if not item.tiene_stock %}
+                            <span class="stock-warning">
+                                <i class="ri-close-circle-line"></i> Stock insuficiente (Disponibles: {{ item.stock_real }})
+                            </span>
+                        {% endif %}
+                    
                     </div>
 
                     <div class="qty-control">
@@ -308,9 +333,18 @@
                 <span>${{ total_final }}</span>
             </div>
 
-            <a href="{% url 'finalizar_compra' %}" class="btn-checkout">
-                FINALIZAR COMPRA <i class="ri-arrow-right-line"></i>
-            </a>
+            {% if bloquear_checkout %}
+                <button class="btn-checkout disabled">
+                    STOCK INSUFICIENTE <i class="ri-error-warning-line"></i>
+                </button>
+                <div style="text-align: center; color: #c0392b; font-size: 0.8rem; margin-top: 10px;">
+                    Por favor, ajusta las cantidades de los productos marcados en rojo.
+                </div>
+            {% else %}
+                <a href="{% url 'finalizar_compra' %}" class="btn-checkout">
+                    FINALIZAR COMPRA <i class="ri-arrow-right-line"></i>
+                </a>
+            {% endif %}
             
             <div style="margin-top: 20px; text-align: center; color: #bdc3c7; font-size: 1.5rem; display: flex; justify-content: center; gap: 15px;">
                 <i class="ri-visa-line"></i>

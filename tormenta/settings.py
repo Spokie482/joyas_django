@@ -24,12 +24,11 @@ print(f"Buscando archivo .env en: {env_path}")
 print(f"¿Existe el archivo?: {env_path.exists()}")
 
 load_dotenv(BASE_DIR / '.env')
-load_dotenv(env_path)
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
 DEBUG = os.getenv('DEBUG', 'False').strip() == 'True'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
@@ -88,20 +87,13 @@ WSGI_APPLICATION = 'tormenta.wsgi.application'
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.postgresql',
-       'NAME': 'angel_wings_db',
-       'USER': 'postgres',       
-       'PASSWORD': 'Mar1@nela',
-       'HOST': 'localhost',
-       'PORT': '5432',
+       'NAME': os.getenv('DB_NAME', 'angel_wings_db'),
+       'USER': os.getenv('DB_USER', 'postgres'),       
+       'PASSWORD': os.getenv('DB_PASSWORD'),
+       'HOST': os.getenv('DB_HOST', 'localhost'),
+       'PORT': os.getenv('DB_PORT', '5432'),
    }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 
 # Password validation

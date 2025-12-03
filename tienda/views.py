@@ -1,7 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-from django.shortcuts import render, get_object_or_404, redirect
 from .carrito import Carrito
 from django.contrib.auth.decorators import login_required
 from .models import Orden, DetalleOrden, Cupon, Favorito, Perfil, Review, Producto, Categoria, Variante
@@ -18,13 +17,9 @@ from datetime import datetime, timedelta
 from django.db import transaction
 
 def catalogo(request):
-    # Traemos TODOS los productos disponibles
     productos = Producto.objects.all()
     categorias = Categoria.objects.all()
     
-    # --- FILTROS GLOBALES (Funcionan para Joyas, Ropa y Maquillaje) ---
-    
-    # A. Búsqueda por Texto
     query = request.GET.get('q')
     if query:
         productos = productos.filter(
@@ -32,12 +27,10 @@ def catalogo(request):
             Q(descripcion__icontains=query)
         )
 
-    # B. Filtro por Categoría
     categoria_filter = request.GET.get('categoria')
     if categoria_filter:
         productos = productos.filter(categoria__slug=categoria_filter)
 
-    # C. Filtro por Rango de Precio (Nuevo)
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     
@@ -50,24 +43,19 @@ def catalogo(request):
     if categoria_slug:
         productos = productos.filter(categoria__slug=categoria_slug)
 
-    # D. Ordenamiento (Nuevo)
-    # opciones: 'reciente', 'precio_asc', 'precio_desc'
-    orden = request.GET.get('orden', 'reciente') # Por defecto: reciente
+    orden = request.GET.get('orden', 'reciente')
     
     if orden == 'precio_asc':
         productos = productos.order_by('precio')
     elif orden == 'precio_desc':
         productos = productos.order_by('-precio')
     else:
-        # Por defecto: lo último que agregaste (ideal para novedades de ropa/makeup)
         productos = productos.order_by('-id') 
 
-
-    # Solo para el slider de ofertas (sigue igual)
     ofertas = Producto.objects.filter(en_oferta=True)[:5]
 
     return render(request, 'tienda/index.html', {
-        'joyas': productos, # Usamos la misma variable para no romper el HTML
+        'joyas': productos,
         'ofertas': ofertas,
         'categorias': categorias,
         'categoria_actual': categoria_slug,
@@ -76,8 +64,6 @@ def catalogo(request):
 def detalle(request, producto_id):
     joya = get_object_or_404(Producto, pk=producto_id)
     
-    # --- 1. LÓGICA DE RESEÑAS ---
-    # Procesar el formulario si se envió (método POST)
     if request.method == 'POST' and request.user.is_authenticated:
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -86,21 +72,16 @@ def detalle(request, producto_id):
             review.usuario = request.user
             review.save()
             messages.success(request, "¡Gracias por tu opinión!")
-            # Redirigimos a la misma página para ver el comentario nuevo
             return redirect('detalle', producto_id=joya.id)
     else:
-        # Si es GET (solo ver la página), el formulario está vacío
         form = ReviewForm()
 
-    # Obtener todas las reseñas de este producto
     reviews = joya.reviews.all().order_by('-fecha')
     
-    # Calcular el promedio de estrellas
     promedio_stars = 0
     if reviews.exists():
         promedio_stars = reviews.aggregate(Avg('calificacion'))['calificacion__avg']
 
-    # --- 2. LÓGICA DE RECOMENDACIONES (La que ya tenías) ---
     min_price = joya.precio * Decimal('0.5')
     max_price = joya.precio * Decimal('2.0')
 
@@ -122,42 +103,33 @@ def detalle(request, producto_id):
     return render(request, 'tienda/detalle.html', {
         'joya': joya,
         'relacionados': relacionados,
-        'reviews': reviews,           # <--- Nuevo: Lista de comentarios
-        'form': form,                 # <--- Nuevo: El formulario
-        'promedio_stars': round(promedio_stars or 0, 1) # <--- Nuevo: Promedio redondeado
+        'reviews': reviews,
+        'form': form,
+        'promedio_stars': round(promedio_stars or 0, 1)
     })
 
 @login_required
 def eliminar_review(request, review_id):
-    # Buscamos la reseña o damos error 404 si no existe
     review = get_object_or_404(Review, id=review_id)
     
-    # Solo permitimos borrar si el usuario es el dueño O es Staff (Admin)
     if request.user == review.usuario or request.user.is_staff:
         review.delete()
         messages.success(request, "Comentario eliminado correctamente.")
     else:
         messages.error(request, "No tienes permiso para eliminar este comentario.")
     
-    # Redirigimos de vuelta a la página del producto
     return redirect('detalle', producto_id=review.producto.id)
 
 def registro(request):
     if request.method == 'POST':
-        # Si llenaron el formulario y le dieron a "Enviar"
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-
             user.backend = 'django.contrib.auth.backends.ModelBackend'
-
-            # Iniciar sesión automáticamente después de registrarse
             login(request, user)
             return redirect('catalogo')
     else:
-        # Si apenas entraron a la página (formulario vacío)
         form = UserCreationForm()
-    
     return render(request, 'tienda/registro.html', {'form': form})
 
 def agregar_carrito(request, producto_id):
@@ -170,25 +142,25 @@ def agregar_carrito(request, producto_id):
     if variante_id:
         variante_obj = get_object_or_404(Variante, id=variante_id)
 
-        if variante_obj.stock < 1:
-             messages.error(request, f"La opción {variante_obj.nombre} está agotada.")
-             return redirect("ver_carrito")
-    
-    
-    
-    # 1. Obtener cantidad actual en el carrito (si existe)
+    if variante_obj:
+        cart_id = f"{producto.id}_{variante_obj.id}"
+        stock_disponible = variante_obj.stock
+        nombre_producto = f"{producto.nombre} ({variante_obj.nombre})"
+    else:
+        cart_id = str(producto.id)
+        stock_disponible = producto.stock
+        nombre_producto = producto.nombre
+
     cantidad_en_carrito = 0
-    if str(producto.id) in carrito.carrito:
-        cantidad_en_carrito = carrito.carrito[str(producto.id)]['cantidad']
+    if cart_id in carrito.carrito:
+        cantidad_en_carrito = carrito.carrito[cart_id]['cantidad']
         
-    # 2. Verificar si podemos agregar uno más
-    if cantidad_en_carrito + 1 > producto.stock:
-        messages.error(request, f"Lo sentimos, solo quedan {producto.stock} unidades de {producto.nombre}.")
+    if cantidad_en_carrito + 1 > stock_disponible:
+        messages.error(request, f"Lo sentimos, solo quedan {stock_disponible} unidades de {nombre_producto}.")
     else:
         carrito.agregar(producto, variante=variante_obj)
-        messages.success(request, f"Agregaste {producto.nombre} al carrito.")
+        messages.success(request, f"Agregaste {nombre_producto} al carrito.")
        
-    
     return redirect("ver_carrito")
 
 def restar_carrito(request, producto_id):
@@ -217,7 +189,6 @@ def limpiar_carrito(request):
     return redirect("ver_carrito")
 
 def ver_carrito(request):
-    # 1. Obtenemos el carrito y el total actual
     carrito = Carrito(request)
     total = carrito.obtener_total()
 
@@ -228,20 +199,16 @@ def ver_carrito(request):
     if cupon_id:
         try:
             cupon = Cupon.objects.get(id=cupon_id)
-            # Calculamos el descuento (Ej: 1000 * 20 / 100 = 200 de descuento)
             descuento_monto = (total * cupon.descuento) / 100
             nombre_cupon = cupon.codigo
         except Cupon.DoesNotExist:
-            del request.session['cupon_id'] # Limpiamos si el cupón se borró de la BD
+            del request.session['cupon_id']
 
     total_final = total - descuento_monto
     
     LIMITE_ENVIO_GRATIS = 30000
-    
-    
-    falta_para_envio = LIMITE_ENVIO_GRATIS - total_final
-    
-    
+    falta_para_envio = max(0, LIMITE_ENVIO_GRATIS - total_final)
+     
     if total_final > 0:
         porcentaje_barra = (total_final / LIMITE_ENVIO_GRATIS) * 100
     else:
@@ -257,14 +224,44 @@ def ver_carrito(request):
         try:
             ahora = datetime.now()
             tiempo_ultimo = datetime.fromisoformat(ultimo_acceso)
-            # Expiración en 2 horas
             expiracion = tiempo_ultimo + timedelta(hours=2)
             diferencia = expiracion - ahora
             segundos_restantes = max(0, diferencia.total_seconds())
         except ValueError:
             pass
 
-    
+    items_visuales = []
+    bloquear_checkout = False
+
+    for key, item in carrito.carrito.items():
+        try:
+            producto = Producto.objects.get(id=item["producto_id"])
+            stock_actual = 0
+            
+            if item["variante_id"]:
+                variante = Variante.objects.get(id=item["variante_id"])
+                stock_actual = variante.stock
+            else:
+                stock_actual = producto.stock
+            
+            cantidad_en_carrito = int(item["cantidad"])
+            
+            tiene_stock = stock_actual >= cantidad_en_carrito
+            llegamos_al_limite = cantidad_en_carrito >= stock_actual
+            
+            if not tiene_stock:
+                bloquear_checkout = True
+            
+            item_display = item.copy()
+            item_display['tiene_stock'] = tiene_stock
+            item_display['llegamos_al_limite'] = llegamos_al_limite
+            item_display['stock_real'] = stock_actual
+            
+            items_visuales.append(item_display)
+
+        except (Producto.DoesNotExist, Variante.DoesNotExist):
+            continue
+
     return render(request, 'tienda/carrito.html', {
         'total': total,
         'total_final': total_final,
@@ -272,8 +269,11 @@ def ver_carrito(request):
         'falta_envio': round(falta_para_envio, 2), 
         'porcentaje_envio': int(porcentaje_barra),
         'segundos_restantes': int(segundos_restantes),
+        'items_visuales': items_visuales,
+        'bloquear_checkout': bloquear_checkout,
+        'nombre_cupon': nombre_cupon,
+        'descuento': descuento_monto
     })
-
 
 @login_required
 def finalizar_compra(request):
@@ -281,10 +281,8 @@ def finalizar_compra(request):
     if not carrito.carrito:
         return redirect('catalogo')
 
-    # 1. Subtotal
     subtotal = carrito.obtener_total()
     
-    # 2. Descuento
     descuento_monto = 0
     cupon_id = request.session.get('cupon_id')
     
@@ -297,15 +295,13 @@ def finalizar_compra(request):
 
     total_con_descuento = subtotal - descuento_monto
 
-    # 3. Envío
     LIMITE_ENVIO_GRATIS = 30000
-    COSTO_ENVIO_FIJO = 5000 # 👈 Define aquí cuánto cuesta el envío normal
+    COSTO_ENVIO_FIJO = 5000
     
     costo_envio = 0
     if total_con_descuento < LIMITE_ENVIO_GRATIS:
         costo_envio = COSTO_ENVIO_FIJO
     
-    # 4. TOTAL FINAL REAL
     total_a_pagar = total_con_descuento + costo_envio
 
     if request.method == 'POST':
@@ -313,13 +309,11 @@ def finalizar_compra(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    # 1. Guardar Orden
                     orden = form.save(commit=False)
                     orden.usuario = request.user
                     orden.total = total_a_pagar
                     orden.save()
 
-                    # 2. Procesar Items y Stock (con bloqueo)
                     for key, item in carrito.carrito.items():
                         producto = Producto.objects.select_for_update().get(id=item["producto_id"])
                         variante_id = item.get("variante_id")
@@ -334,20 +328,22 @@ def finalizar_compra(request):
                             stock_actual = producto.stock
                             nombre_ref = producto.nombre
 
-                        # Validación de Stock
                         if stock_actual < cantidad:
                             raise ValueError(f"Lo sentimos, ya no hay suficiente stock de {nombre_ref}.")
 
-                        # Crear detalle
+                        if producto.en_oferta and producto.precio_oferta:
+                            precio_final_unitario = producto.precio_oferta
+                        else:
+                            precio_final_unitario = producto.precio
+
                         DetalleOrden.objects.create(
                             orden=orden,
                             producto=producto,
                             variante=variante_obj,
                             cantidad=cantidad,
-                            precio_unitario=float(item["precio"])
+                            precio_unitario=precio_final_unitario
                         )
 
-                        # Restar stock
                         if variante_obj:
                             variante_obj.stock -= cantidad
                             variante_obj.save()
@@ -357,10 +353,7 @@ def finalizar_compra(request):
 
                     if 'cupon_id' in request.session:
                         try:
-                            # Bloqueamos el cupón también por seguridad
                             cupon_usado = Cupon.objects.select_for_update().get(id=request.session['cupon_id'])
-                            
-                            # Agregamos al usuario a la lista de "ya usados"
                             cupon_usado.usuarios_usados.add(request.user) 
                         except Cupon.DoesNotExist:
                             pass
@@ -373,11 +366,8 @@ def finalizar_compra(request):
                 messages.error(request, "Error inesperado al procesar la compra.")
                 return redirect('ver_carrito')
 
-            # --- ÉXITO ---
-            # Solo vaciamos si todo salió bien
             carrito.vaciar()
             
-            # Limpiamos el cupón de la sesión
             if 'cupon_id' in request.session:
                 del request.session['cupon_id']
                 
@@ -388,7 +378,6 @@ def finalizar_compra(request):
     return render(request, 'tienda/checkout.html', {
         'form': form, 
         'carrito': carrito,
-        # Enviamos los valores calculados al HTML
         'subtotal': subtotal,
         'descuento': descuento_monto,
         'costo_envio': costo_envio,
@@ -396,32 +385,24 @@ def finalizar_compra(request):
     })
 
 def mis_compras(request):
-    # Buscamos solo las órdenes de ESTE usuario, ordenadas de la más nueva a la más vieja
     ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha')
     return render(request, 'tienda/mis_compras.html', {'ordenes': ordenes})
 
 def editar_perfil(request):
-    # --- BLOQUE DE SEGURIDAD (NUEVO) ---
     try:
-        # Intentamos acceder al perfil
         perfil = request.user.perfil
     except Perfil.DoesNotExist:
-        # Si no existe (porque es un usuario viejo), lo creamos manual
         perfil = Perfil.objects.create(usuario=request.user)
     
-    
     if request.method == 'POST':
-        # Cargamos los datos enviados en ambos formularios
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = PerfilUpdateForm(request.POST, request.FILES, instance=perfil)
         
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            # Redirigimos a la misma página o a 'mis compras' para mostrar éxito
             return redirect('editar_perfil') 
     else:
-        # Si es GET, mostramos los formularios con los datos actuales
         u_form = UserUpdateForm(instance=request.user)
         p_form = PerfilUpdateForm(instance=perfil)
 
@@ -435,24 +416,19 @@ def editar_perfil(request):
 def toggle_favorito(request, producto_id):
     producto = get_object_or_404(Producto, id=producto_id)
     
-    # Buscamos si ya existe el like
     favorito_existente = Favorito.objects.filter(usuario=request.user, producto=producto).first()
     
     if favorito_existente:
-        # Si existe, lo borramos (Dislike)
         favorito_existente.delete()
         agregado = False
     else:
-        # Si no existe, lo creamos (Like)
         Favorito.objects.create(usuario=request.user, producto=producto)
         agregado = True
     
-    # Devolvemos una respuesta JSON para que Javascript la lea sin recargar
     return JsonResponse({'agregado': agregado})
 
 @login_required
 def mis_favoritos(request):
-    # Obtenemos los favoritos ordenados por fecha (más recientes primero)
     favoritos = Favorito.objects.filter(usuario=request.user).order_by('-fecha')
     return render(request, 'tienda/mis_favoritos.html', {'favoritos': favoritos})
 
@@ -466,7 +442,6 @@ def aplicar_cupon(request):
                 valido_desde__lte=timezone.now(),
                 valido_hasta__gte=timezone.now()
             )
-            
             
             if request.user.is_authenticated and request.user in cupon.usuarios_usados.all():
                 messages.error(request, f"Ya has utilizado el cupón {cupon.codigo} anteriormente.")
@@ -483,21 +458,15 @@ def aplicar_cupon(request):
 
 @staff_member_required
 def dashboard_admin(request):
-    # ... (Mantén tus KPIs anteriores: total_usuarios, total_ordenes, etc.) ...
     total_usuarios = User.objects.count()
     total_ordenes = Orden.objects.count()
     ingresos_totales = Orden.objects.aggregate(Sum('total'))['total__sum'] or 0
     low_stock_count = Producto.objects.filter(stock__lte=3).count()
 
-    # --- NUEVA DATA PARA EL DASHBOARD (RESEÑAS) ---
-    # 1. Promedio General de Calidad (De 1 a 5 estrellas)
     promedio_calidad = Review.objects.aggregate(Avg('calificacion'))['calificacion__avg'] or 0
 
-    # 2. Últimas 3 Reseñas para monitorear
     ultimas_reviews = Review.objects.order_by('-fecha')[:3]
-    # ---------------------------------------------
 
-    # ... (Mantén la lógica de tus gráficos y órdenes recientes) ...
     ordenes_por_estado = Orden.objects.values('estado').annotate(cantidad=Count('id'))
     labels_estados = [x['estado'] for x in ordenes_por_estado]
     data_estados = [x['cantidad'] for x in ordenes_por_estado]
@@ -516,11 +485,8 @@ def dashboard_admin(request):
         'ingresos_totales': ingresos_totales,
         'low_stock_count': low_stock_count,
         'ordenes_recientes': ordenes_recientes,
-
-        # Pasamos los nuevos datos
         'promedio_calidad': round(promedio_calidad, 1),
         'ultimas_reviews': ultimas_reviews,
-
         'labels_estados': json.dumps(labels_estados),
         'data_estados': json.dumps(data_estados),
         'labels_top': json.dumps(labels_top),
@@ -531,15 +497,15 @@ def buscar_productos_ajax(request):
     query = request.GET.get('q', '')
     resultados = []
     
-    if len(query) > 2: # Solo buscar si escribe más de 2 letras
-        productos = Producto.objects.filter(nombre__icontains=query)[:5] # Máx 5 resultados
+    if len(query) > 2:
+        productos = Producto.objects.filter(nombre__icontains=query)[:5]
         for p in productos:
             resultados.append({
                 'id': p.id,
                 'nombre': p.nombre,
                 'precio': str(p.precio),
                 'imagen': p.imagen.url if p.imagen else '',
-                'url': f"/producto/{p.id}/" # La url para ir al detalle
+                'url': f"/producto/{p.id}/"
             })
     
     return JsonResponse({'resultados': resultados})

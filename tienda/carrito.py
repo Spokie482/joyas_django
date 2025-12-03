@@ -1,15 +1,15 @@
 from datetime import datetime, timedelta
+from decimal import Decimal
+from django.conf import settings
+from tienda.models import Producto, Variante
 
 class Carrito:
     def __init__(self, request):
         self.request = request
         self.session = request.session
-        
-        # 1. Intentamos obtener el carrito
         carrito = self.session.get("carrito")
-        
-        # 2. Verificamos expiración (2 HORAS)
         ultimo_acceso = self.session.get("carrito_ultimo_acceso")
+
         if ultimo_acceso:
             try:
                 ahora = datetime.now()
@@ -60,7 +60,6 @@ class Carrito:
         self.guardar()
 
     def guardar(self):
-        # Actualizamos la marca de tiempo al momento actual
         self.session["carrito_ultimo_acceso"] = datetime.now().isoformat()
         self.session["carrito"] = self.carrito
         self.session.modified = True
@@ -93,9 +92,42 @@ class Carrito:
         if "carrito_ultimo_acceso" in self.session:
             del self.session["carrito_ultimo_acceso"]
         self.session.modified = True
-        
+    
     def obtener_total(self):
-        total = 0
-        for item in self.carrito.values():
-            total += float(item["precio"]) * item["cantidad"]
-        return total
+            total = Decimal("0.00")
+            ids_a_eliminar = [] # Lista para limpiar productos que ya no existen en BD
+
+            for cart_id, item in self.carrito.items():
+                try:
+                    # 1. Obtenemos el producto real de la BD
+                    producto = Producto.objects.get(id=item["producto_id"])
+                    
+                    # 2. Determinamos el precio real actual
+                    if producto.en_oferta and producto.precio_oferta:
+                        precio_real = producto.precio_oferta
+                    else:
+                        precio_real = producto.precio
+                    
+                    # (Nota: Si las variantes tuvieran sobreprecio, aquí sumaríamos esa lógica)
+                    
+                    # 3. Sumamos al total
+                    total += precio_real * item["cantidad"]
+                    
+                    # Opcional: Actualizamos el precio en la sesión para que el usuario lo vea actualizado
+                    # en la lista de items sin recargar toda la lógica visual
+                    item["precio"] = str(precio_real)
+
+                except Producto.DoesNotExist:
+                    # Si el producto fue borrado de la tienda, lo marcamos para quitar del carrito
+                    ids_a_eliminar.append(cart_id)
+            
+            # Limpieza de items huerfanos
+            if ids_a_eliminar:
+                for cart_id in ids_a_eliminar:
+                    del self.carrito[cart_id]
+                self.guardar()
+
+            return total
+    
+        
+   
