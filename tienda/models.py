@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import Q
+from .utils import comprimir_imagen
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
@@ -63,6 +64,20 @@ class Producto(models.Model):
     precio_oferta = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Precio Rebajado")
 
     objects = ProductoQuerySet.as_manager()
+
+    def save(self, *args, **kwargs):
+        # Si hay imagen y es nueva (o ha cambiado), la comprimimos
+        if self.imagen:
+            # Verificamos si la imagen está siendo modificada comparando con la instancia en BD
+            try:
+                this = Producto.objects.get(id=self.id)
+                if this.imagen != self.imagen:
+                    self.imagen = comprimir_imagen(self.imagen, nuevo_ancho=800)
+            except Producto.DoesNotExist:
+                # Es un producto nuevo
+                self.imagen = comprimir_imagen(self.imagen, nuevo_ancho=800)
+        
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
@@ -135,6 +150,18 @@ class Perfil(models.Model):
     ciudad = models.CharField(max_length=100, blank=True, null=True, verbose_name="Ciudad")
     codigo_postal = models.CharField(max_length=20, blank=True, null=True, verbose_name="Código Postal")
     foto = models.ImageField(upload_to='perfiles/', blank=True, null=True, verbose_name="Foto de Perfil")
+
+    def save(self, *args, **kwargs):
+        if self.foto:
+            try:
+                this = Perfil.objects.get(id=self.id)
+                if this.foto != self.foto:
+                    # Para perfil usamos 300px, suficiente para el círculo
+                    self.foto = comprimir_imagen(self.foto, nuevo_ancho=300)
+            except Perfil.DoesNotExist:
+                self.foto = comprimir_imagen(self.foto, nuevo_ancho=300)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Perfil de {self.usuario.username}"
