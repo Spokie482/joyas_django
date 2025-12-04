@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta, datetime
 from decimal import Decimal
 from django.conf import settings
 from tienda.models import Producto, Variante
+from django.utils import timezone
 
 class Carrito:
     def __init__(self, request):
@@ -12,16 +13,20 @@ class Carrito:
 
         if ultimo_acceso:
             try:
-                ahora = datetime.now()
+                # Usamos timezone.now() que es "aware" (tiene zona horaria)
+                ahora = timezone.now()
+                # Parseamos la fecha guardada (isoformat guarda la info de zona horaria si se usó timezone)
                 tiempo_ultimo = datetime.fromisoformat(ultimo_acceso)
+                
                 # Si pasaron más de 2 horas (7200 segundos)
                 if ahora - tiempo_ultimo > timedelta(hours=2):
                     carrito = {} # Vaciamos localmente
                     self.session["carrito"] = {} # Vaciamos en sesión
                     if "carrito_ultimo_acceso" in self.session:
                         del self.session["carrito_ultimo_acceso"]
-            except ValueError:
-                pass # Si hay error de formato, ignoramos
+            except (ValueError, TypeError): 
+                # TypeError captura errores de comparación naive/aware
+                pass
 
         if not carrito:
             carrito = self.session["carrito"] = {}
@@ -60,7 +65,7 @@ class Carrito:
         self.guardar()
 
     def guardar(self):
-        self.session["carrito_ultimo_acceso"] = datetime.now().isoformat()
+        self.session["carrito_ultimo_acceso"] = timezone.now().isoformat()
         self.session["carrito"] = self.carrito
         self.session.modified = True
 

@@ -358,7 +358,7 @@
                 <div class="offer-img-col">
                     <span class="badge-offer">Oferta Especial</span>
                     {% if oferta.imagen %}
-                        <img src="{{ oferta.imagen.url }}" alt="{{ oferta.nombre }}">
+                        <img src="{{ oferta.imagen.url }}" alt="{{ oferta.nombre }}" loading="lazy">
                     {% else %}
                         <div style="width:100%; height:100%; background:#ecf0f1; display:flex; align-items:center; justify-content:center; color:#95a5a6;">Sin imagen</div>
                     {% endif %}
@@ -466,7 +466,7 @@
                 <a href="{% url 'detalle' joya.id %}" style="text-decoration: none;">
                     <div class="card-img-container">
                         {% if joya.imagen %}
-                            <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="card-img">
+                            <img src="{{ joya.imagen.url }}" alt="{{ joya.nombre }}" class="card-img" loading="lazy">
                         {% else %}
                             <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">Sin Foto</div>
                         {% endif %}

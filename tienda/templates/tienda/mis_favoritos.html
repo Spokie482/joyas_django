@@ -115,7 +115,7 @@
 
                 <a href="{% url 'detalle' fav.producto.id %}" style="text-decoration: none;">
                     {% if fav.producto.imagen %}
-                        <img src="{{ fav.producto.imagen.url }}" class="fav-img">
+                        <img src="{{ fav.producto.imagen.url }}" class="fav-img" loading="lazy">
                     {% else %}
                         <div class="fav-img" style="display: flex; align-items: center; justify-content: center; color: #ccc;">Sin Imagen</div>
                     {% endif %}

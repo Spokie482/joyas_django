@@ -534,7 +534,7 @@
             <a href="{% url 'detalle' rel.id %}" class="related-card">
                 <div class="related-img-box">
                     {% if rel.imagen %}
-                        <img src="{{ rel.imagen.url }}" alt="{{ rel.nombre }}">
+                        <img src="{{ rel.imagen.url }}" alt="{{ rel.nombre }}" loading="lazy">
                     {% else %}
                         <div style="height:100%; display:flex; align-items:center; justify-content:center; color:#ccc;">Sin Foto</div>
                     {% endif %}
