@@ -2,9 +2,9 @@
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db.models import Q
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=50)
@@ -16,6 +16,36 @@ class Categoria(models.Model):
     class Meta:
         verbose_name = "Categoría"
         verbose_name_plural = "Categorías"
+
+class ProductoQuerySet(models.QuerySet):
+    def buscar(self, query):
+        if query:
+            return self.filter(
+                Q(nombre__icontains=query) | 
+                Q(descripcion__icontains=query)
+            )
+        return self
+
+    def filtrar_por_categoria(self, categoria_slug):
+        if categoria_slug:
+            return self.filter(categoria__slug=categoria_slug)
+        return self
+
+    def filtrar_por_precio(self, min_price, max_price):
+        qs = self
+        if min_price:
+            qs = qs.filter(precio__gte=min_price)
+        if max_price:
+            qs = qs.filter(precio__lte=max_price)
+        return qs
+
+    def ordenar(self, orden):
+        if orden == 'precio_asc':
+            return self.order_by('precio')
+        elif orden == 'precio_desc':
+            return self.order_by('-precio')
+        # Por defecto ordenamos por ID descendente (más nuevos primero)
+        return self.order_by('-id')
 
 class Producto(models.Model):
     nombre = models.CharField(max_length=200)
@@ -31,6 +61,8 @@ class Producto(models.Model):
 
     en_oferta = models.BooleanField(default=False, verbose_name="¿Está en Oferta?")
     precio_oferta = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Precio Rebajado")
+
+    objects = ProductoQuerySet.as_manager()
 
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"

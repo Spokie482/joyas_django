@@ -18,41 +18,25 @@ from django.db import transaction
 from django.core.cache import cache
 
 def catalogo(request):
-    productos = Producto.objects.all()
-    categorias = Categoria.objects.all()
-    
+    # 1. Obtener parámetros de la URL
     query = request.GET.get('q')
-    if query:
-        productos = productos.filter(
-            Q(nombre__icontains=query) | 
-            Q(descripcion__icontains=query)
-        )
-
-    categoria_filter = request.GET.get('categoria')
-    if categoria_filter:
-        productos = productos.filter(categoria__slug=categoria_filter)
-
+    categoria_slug = request.GET.get('categoria')
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
-    
-    if min_price:
-        productos = productos.filter(precio__gte=min_price)
-    if max_price:
-        productos = productos.filter(precio__lte=max_price)
-
-    categoria_slug = request.GET.get('categoria')
-    if categoria_slug:
-        productos = productos.filter(categoria__slug=categoria_slug)
-
     orden = request.GET.get('orden', 'reciente')
-    
-    if orden == 'precio_asc':
-        productos = productos.order_by('precio')
-    elif orden == 'precio_desc':
-        productos = productos.order_by('-precio')
-    else:
-        productos = productos.order_by('-id') 
 
+    # 2. Usar nuestro nuevo Manager para filtrar (Código Limpio)
+    productos = (
+        Producto.objects
+        .buscar(query)
+        .filtrar_por_categoria(categoria_slug)
+        .filtrar_por_precio(min_price, max_price)
+        .ordenar(orden)
+    )
+
+    # 3. Datos adicionales para el template
+    categorias = Categoria.objects.all()
+    # Mantenemos la lógica de ofertas aparte como estaba
     ofertas = Producto.objects.filter(en_oferta=True)[:5]
 
     return render(request, 'tienda/index.html', {
