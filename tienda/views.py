@@ -207,7 +207,7 @@ def ver_carrito(request):
     
     if carrito.carrito and ultimo_acceso:
         try:
-            ahora = datetime.now()
+            ahora = timezone.now()
             tiempo_ultimo = datetime.fromisoformat(ultimo_acceso)
             expiracion = tiempo_ultimo + timedelta(hours=2)
             diferencia = expiracion - ahora
